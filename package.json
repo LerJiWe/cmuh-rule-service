@@ -1,0 +1,31 @@
+{
+  "name": "@cmuh-model/fact-service",
+  "version": "1.0.0",
+  "description": "CMUH model - sample",
+  "author": "CMUH",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rimraf ./dist",
+    "build": "tsc -p ./",
+    "postbuild": "npm run build:doc",
+    "pretest": "npm run build",
+    "test": "node ./dist/test",
+    "presvcTest": "npm run build",
+    "svcTest": "node ./dist/app/fact-service/test",
+    "build:doc": "rimraf doc && typedoc --tsconfig tsconfig.json src/"
+  },
+  "dependencies": {
+    "@cmuh/api-config": "git+https://gitserver.cmuh.org.tw/cmuh.modules/api-config.git",
+    "@cmuh/mssql": "git+https://gitserver.cmuh.org.tw/cmuh.modules/mssql.git",
+    "mssql": "^5.1.0",
+    "json-rules-engine": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/mssql": "^4.0.13",
+    "@types/node": "^12.0.0",
+    "rimraf": "^2.6.3",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.4.5"
+  }
+}
