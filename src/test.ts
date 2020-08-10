@@ -2,7 +2,7 @@ import { join } from 'path';
 
 import { ApiConfig, Config } from '@cmuh/api-config';
 // import { SampleModel } from './app/sample.model';
-import { VisitFactService } from './app/fact-service';
+import { VisitFactService } from './app/fact-service/visit-fact.service';
 // import { PregnantService } from './app/fact-service';
 // import { HttpPost } from './app/http';
 // import { HttpGet } from './app/http';
