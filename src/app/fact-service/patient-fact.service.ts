@@ -1,8 +1,6 @@
-// import { HttpPost, HttpPut } from '../http';
 import { ApiConfig, Config } from '@cmuh/api-config';
 import { SqlExecute } from '@cmuh/mssql';
 import { CaseVariable } from '../viewmodel';
-import { Almanac } from 'json-rules-engine';
 
 export class PatientFactService {
 

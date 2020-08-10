@@ -1,8 +1,6 @@
 import { ApiConfig, Config } from '@cmuh/api-config';
 import { SqlExecute } from '@cmuh/mssql';
 import { CaseVariable } from '../viewmodel';
-import { Almanac } from 'json-rules-engine';
-import { setTimeout } from 'timers';
 
 export class VisitFactService {
 
@@ -179,7 +177,7 @@ export class VisitFactService {
         params['startDate'] = startDate;
         params['endDate'] = endDate
 
-        const result = await this.healthCare.executeQuery('getLastLabValue', params);        
+        const result = await this.healthCare.executeQuery('getLastLabValue', params);
 
         return result === undefined ? factVariable.params["invalidValue"] : result.examValue
 
