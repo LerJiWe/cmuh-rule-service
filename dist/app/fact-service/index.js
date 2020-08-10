@@ -13,4 +13,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./fact-provider-dynamic"), exports);
 __exportStar(require("./fact-provider-runtime"), exports);
 __exportStar(require("./fact-service-set"), exports);
+__exportStar(require("./patient-fact.service"), exports);
+__exportStar(require("./visit-fact.service"), exports);
+__exportStar(require("./drug-fact.service"), exports);
+__exportStar(require("./test-fact.service"), exports);
 //# sourceMappingURL=index.js.map
