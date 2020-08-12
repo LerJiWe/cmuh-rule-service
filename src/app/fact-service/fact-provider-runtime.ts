@@ -155,7 +155,7 @@ export class FactProviderRuntime implements FactProvider<Promise<Record<string, 
             functionName: 'getIsNhi',
             isCache: false
         },
-        'dosage': { // 目前陳副版本不採用
+        'dosage': {
             serviceName: 'DrugFactService',
             functionName: 'getDosageQty',
             isCache: false

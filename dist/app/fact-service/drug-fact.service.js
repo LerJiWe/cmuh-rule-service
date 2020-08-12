@@ -24,13 +24,11 @@ class DrugFactService {
     getIsNhi(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
             let r = inputParams['isSelf'] ? "FALSE" : "TRUE";
-            console.log('[isNhi]', r);
             return r;
         });
     }
     getDosageQty(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("getDosageQty");
             // dosage 是開立的每次劑量,單位可能不是計價也不是服用
             // dosageQty 是本次開立的每次劑量
             // dosageUnit 本次開立的劑量單位
@@ -164,7 +162,7 @@ class DrugFactService {
                 params['endDate'] = endDate;
                 const result = yield this.healthCare.executeQuery('getTotalQtyInPeriod', params);
                 let list = Array.isArray(result) ? result : [];
-                console.log(list);
+                // console.log(list);
                 let qty = inputParams['totalQty'];
                 list.forEach(l => { qty += l.execQty; });
                 return qty;
@@ -266,11 +264,13 @@ class DrugFactService {
     // }
     getDrugs(factVariable, inputParams) {
         let medOrderList = inputParams["medOrderList"];
-        let medCodes = [];
-        medOrderList.forEach(x => {
-            medCodes.push(x.medCode);
+        let medCode = inputParams["medCode"];
+        let medCodeList = [];
+        let filterArray = medOrderList.filter(x => { return x.medCode !== medCode; });
+        filterArray.forEach(x => {
+            medCodeList.push(x.medCode);
         });
-        return medCodes;
+        return medCodeList;
     }
     getOrders(factVariable, inputParams) {
         // TODO

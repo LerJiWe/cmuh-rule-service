@@ -25,14 +25,15 @@ class Test {
                 // let r = await this.drugSvc.getTotalQtyInPeriod(f, inputParams);
                 // let r = await this.drugSvc.getTotalQty(f, inputParams);
                 // let r = await this.drugSvc.getDrugs(f, inputParams);
-                let r = await this.drugSvc.getDosageQty(f, inputParams);
+                // let r = await this.drugSvc.getDosageQty(f, inputParams);
                 // let r = await this.drugSvc.getAtcCodes(f, inputParams);
+                let r = await this.drugSvc.getDrugs(f, inputParams);
 
                 // let r = await this.patientSvc.getAge(f, inputParams);
                 // let r = await this.patientSvc.getGender(f, inputParams);
                 console.log(r);
             }
-            
+
         }
 
 
@@ -358,7 +359,11 @@ const visitFact = {
             "_selected": true,
             "tipList": [],
             "cellAlert": {}
-        }
+        },
+        { "medCode": "TIVABRA", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
+        { "medCode": "TIVABRA1", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
+        { "medCode": "TIVABRA2", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
+        { "medCode": "TIVABRA2", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" }
     ],
     "visitNo": 136198811,
     "visitType": "A",

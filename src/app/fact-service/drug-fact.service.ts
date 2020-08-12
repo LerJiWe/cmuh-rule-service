@@ -18,12 +18,10 @@ export class DrugFactService {
     public async getIsNhi(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         let r = inputParams['isSelf'] ? "FALSE" : "TRUE";
-        console.log('[isNhi]', r)
         return r;
     }
 
     public async getDosageQty(factVariable: CaseVariable, inputParams: Record<string, any>) {
-        console.log("getDosageQty");
         // dosage 是開立的每次劑量,單位可能不是計價也不是服用
         // dosageQty 是本次開立的每次劑量
         // dosageUnit 本次開立的劑量單位
@@ -171,7 +169,7 @@ export class DrugFactService {
 
             const result = await this.healthCare.executeQuery('getTotalQtyInPeriod', params)
             let list = Array.isArray(result) ? result : [];
-            console.log(list);
+            // console.log(list);
             let qty = inputParams['totalQty'];
 
             list.forEach(l => { qty += l.execQty });
@@ -302,13 +300,17 @@ export class DrugFactService {
     public getDrugs(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         let medOrderList: any[] = inputParams["medOrderList"];
-        let medCodes: string[] = [];
+        let medCode: string = inputParams["medCode"];
 
-        medOrderList.forEach(x => {
-            medCodes.push(x.medCode);
+        let medCodeList: string[] = [];
+
+        let filterArray = medOrderList.filter(x => { return x.medCode !== medCode });
+
+        filterArray.forEach(x => {
+            medCodeList.push(x.medCode);
         });
 
-        return medCodes;
+        return medCodeList;
     }
 
     public getOrders(factVariable: CaseVariable, inputParams: Record<string, any>) {
