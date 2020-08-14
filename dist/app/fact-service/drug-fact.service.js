@@ -81,7 +81,8 @@ class DrugFactService {
                 let params = {};
                 params['medCode'] = inputParams['medCode'];
                 params['idNo'] = inputParams['idNo'];
-                let usedDate = yield this.preparedUsedDate(periodOrType);
+                let period = typeof (periodOrType) === 'string' ? undefined : periodOrType;
+                let usedDate = yield this.preparedUsedDate(period);
                 params['startDate'] = usedDate.startDate;
                 params['endDate'] = usedDate.endDate;
                 params['isSelfList'] = [0, 1];
@@ -141,7 +142,8 @@ class DrugFactService {
                 // console.log('MedCode:', params['medCode']);
                 params['idNo'] = inputParams['idNo'];
                 // console.log('IdNo:', params['idNo']);
-                let usedDate = yield this.preparedUsedDate(periodOrType);
+                let period = typeof (periodOrType) === 'string' ? undefined : periodOrType;
+                let usedDate = yield this.preparedUsedDate(period);
                 params['startDate'] = usedDate.startDate;
                 params['endDate'] = usedDate.endDate;
                 // console.log('startDate', startDate);
@@ -160,8 +162,10 @@ class DrugFactService {
     }
     preparedUsedDate(period) {
         return __awaiter(this, void 0, void 0, function* () {
-            const periodNum = period.substring(0, (period.length - 1));
-            const periodUnit = period[period.length - 1];
+            // const periodNum = period.substring(0, (period.length - 1));
+            // const periodUnit = period[period.length - 1];
+            const periodNum = period.quantity;
+            const periodUnit = period.unit;
             const dateOffset = (d, offset) => d.setDate(d.getDate() - offset);
             const monthOffset = (d, offset) => d.setMonth(d.getMonth() - offset);
             const yearOffset = (d, offset) => d.setFullYear(d.getFullYear() - offset);

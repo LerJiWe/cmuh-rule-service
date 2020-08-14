@@ -78,7 +78,8 @@ export class DrugFactService {
             params['medCode'] = inputParams['medCode'];
             params['idNo'] = inputParams['idNo']
 
-            let usedDate = await this.preparedUsedDate(periodOrType);
+            let period: { quantity: number, unit: string } = typeof (periodOrType) === 'string' ? undefined : periodOrType;
+            let usedDate = await this.preparedUsedDate(period);
 
             params['startDate'] = usedDate.startDate;
             params['endDate'] = usedDate.endDate;
@@ -87,7 +88,7 @@ export class DrugFactService {
             const result = await this.healthCare.executeQuery('getDrugUsedQty', params)
             // console.log('result', result);
             // let list = Array.isArray(result) ? result : [];
-            let r = result.usedDays === undefined ? 0 : result.usedDays            
+            let r = result.usedDays === undefined ? 0 : result.usedDays
             let days = inputParams['usedDays'];
 
             // let admissionList: Set<string> = new Set();
@@ -125,7 +126,7 @@ export class DrugFactService {
 
     public async getTotalQty(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
-        const periodOrType: string = factVariable.params["for"];
+        const periodOrType: string | { quantity: number, unit: string } = factVariable.params["for"];
 
         if (periodOrType === 'N') { return inputParams['totalQty']; }
         else if (periodOrType === 'V') {
@@ -140,7 +141,8 @@ export class DrugFactService {
             // console.log('MedCode:', params['medCode']);
             params['idNo'] = inputParams['idNo']
             // console.log('IdNo:', params['idNo']);
-            let usedDate = await this.preparedUsedDate(periodOrType);
+            let period: { quantity: number, unit: string } = typeof (periodOrType) === 'string' ? undefined : periodOrType;
+            let usedDate = await this.preparedUsedDate(period);
 
             params['startDate'] = usedDate.startDate;
             params['endDate'] = usedDate.endDate;
@@ -161,10 +163,13 @@ export class DrugFactService {
         }
     }
 
-    private async preparedUsedDate(period: string) {
+    private async preparedUsedDate(period: { quantity: number, unit: string } | undefined) {
 
-        const periodNum = period.substring(0, (period.length - 1));
-        const periodUnit = period[period.length - 1];
+        // const periodNum = period.substring(0, (period.length - 1));
+        // const periodUnit = period[period.length - 1];
+
+        const periodNum = period.quantity;
+        const periodUnit = period.unit;
 
         const dateOffset = (d: Date, offset: number) => d.setDate(d.getDate() - offset);
         const monthOffset = (d: Date, offset: number) => d.setMonth(d.getMonth() - offset);
