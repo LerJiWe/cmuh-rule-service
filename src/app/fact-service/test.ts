@@ -24,10 +24,12 @@ class Test {
 
                 // let r = await this.drugSvc.getTotalQtyInPeriod(f, inputParams);
                 // let r = await this.drugSvc.getTotalQty(f, inputParams);
+                let r = await this.drugSvc.getUsedDays(f, inputParams);
+                // let r = await this.drugSvc.getFreq(f, inputParams);                
                 // let r = await this.drugSvc.getDrugs(f, inputParams);
                 // let r = await this.drugSvc.getDosageQty(f, inputParams);
                 // let r = await this.drugSvc.getAtcCodes(f, inputParams);
-                let r = await this.drugSvc.getDrugs(f, inputParams);
+                // let r = await this.drugSvc.getDrugs(f, inputParams);
 
                 // let r = await this.patientSvc.getAge(f, inputParams);
                 // let r = await this.patientSvc.getGender(f, inputParams);
@@ -95,13 +97,32 @@ const facts: CaseVariable[] = [
     //     },
     //     fullName: "examValue_for_13D"
     // },
+    // {
+    //     variable: "dosage",
+    //     params: {
+    //         "unit": "cc"
+    //     },
+    //     fullName: "examValue_for_13D"
+    // },
     {
-        variable: "dosage",
+        variable: "totalQty",
         params: {
-            "unit": "cc"
+            "for": "30D"
         },
-        fullName: "examValue_for_13D"
-    }
+        fullName: "totalQty_for_100D"
+    },
+    {
+        variable: "totalQty",
+        params: {
+            "for": "100D"
+        },
+        fullName: "totalQty_for_100D"
+    },
+    // {
+    //     variable: "freq",
+    //     params: {},
+    //     fullName: "freq"
+    // }
 ]
 
 // const facts: CaseVariable[] = [
@@ -120,251 +141,260 @@ const facts: CaseVariable[] = [
 
 const visitFact = {
     "medOrderList": [
+        // {
+        //     "orderNo": 0,
+        //     "orderTimeStamp": "",
+        //     "orderSource": 0,
+        //     "groupNo": 0,
+        //     "seqNo": 0,
+        //     "visitNo": 136198811,
+        //     "medType": 1310100,
+        //     "invCode": 4005,
+        //     "medCode": "TIVABRA",
+        //     "antiType": "",
+        //     "medDesc": "",
+        //     "medName": "Ivabradine 5mg/Tab",
+        //     "dosageQty": 100,
+        //     "dosageUnit": "mg",
+        //     "unitList": [],
+        //     "ingredDosage": 0,
+        //     "capacityDosage": 0,
+        //     "volumeDosage": 0,
+        //     "capacityRatio": 1,
+        //     "volumeRatio": 5,
+        //     "usageNo": 1000,
+        //     "usage": "BID",
+        //     "usedTimeNo": 21,
+        //     "timePoint": "000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        //     "usedTimeDesc": "",
+        //     "wayNo": 25,
+        //     "way": "PO",
+        //     "usedDays": 14,
+        //     "keepTime": 0,
+        //     "firstQty": 2,
+        //     "totalQty": 28,
+        //     "totalUnit": "Tab",
+        //     "ingredQty": 0,
+        //     "ingredRatio": 0,
+        //     "isSelf": false,
+        //     "isMill": false,
+        //     "isOnCost": false,
+        //     "canMill": false,
+        //     "canHalf": false,
+        //     "isMulti": false,
+        //     "advise": "",
+        //     "confirmUser": {
+        //         "userNo": 0,
+        //         "userCode": "",
+        //         "userName": ""
+        //     },
+        //     "confirmTime": "2020-08-03T08:50:49.400Z",
+        //     "orderTime": "2020-08-03T08:57:17.828Z",
+        //     "startTime": "2020-08-03T08:57:17.828Z",
+        //     "startUser": {
+        //         "userNo": 30666,
+        //         "userCode": "A30666",
+        //         "userName": "楊名棟",
+        //         "empDiv": "120",
+        //         "saveChemo": false,
+        //         "controlledDrugLincense": false
+        //     },
+        //     "endTime": "2020-08-17T08:57:14.178Z",
+        //     "endUser": {
+        //         "userNo": 0,
+        //         "userCode": "",
+        //         "userName": ""
+        //     },
+        //     "preExecLoc": "B7  ",
+        //     "expandTime": "2020-08-03T08:50:49.400Z",
+        //     "tranTime": "2020-08-03T08:50:49.400Z",
+        //     "tranStatus": 0,
+        //     "statusName": "",
+        //     "stockNo": "",
+        //     "orderLoc": "",
+        //     "chargeType": "",
+        //     "isErAdd": false,
+        //     "isOpAdd": false,
+        //     "isChdAdd": false,
+        //     "registerNo": 0,
+        //     "linkNo": 0,
+        //     "masterNo": 0,
+        //     "detailNo": 0,
+        //     "controlDrug": 0,
+        //     "medStatus": 10,
+        //     "systemUserNo": 30666,
+        //     "systemTime": "2020-08-03T08:50:49.400Z",
+        //     "entityState": "added",
+        //     "dripRateInfo": [],
+        //     "nhiCode": "BC26097100  ",
+        //     "feeType": 0,
+        //     "dosageUnitNo": 10,
+        //     "chargeUnit": "Tab",
+        //     "dcRatio": 1,
+        //     "dosageForms": 1,
+        //     "highAlert": 0,
+        //     "isInterReview": false,
+        //     "isOpdOrder": false,
+        //     "isAdmOrder": true,
+        //     "isEmgOrder": false,
+        //     "isCtOrder": false,
+        //     "isPriorReview": false,
+        //     "priorReviewType": 0,
+        //     "isRelation": false,
+        //     "hints": [],
+        //     "atcCode": [
+        //         "C01EB17"
+        //     ],
+        //     "useFeatures": true,
+        //     "dosage": 1,
+        //     "chargeUnitNo": 10,
+        //     "fs6Phrcm": "O",
+        //     "unitConvertType": 1,
+        //     "displayDoseUnit": "mg",
+        //     "displayDoseRatio": 5,
+        //     "dosageUnitOptions": [
+        //         {
+        //             "unit": "Tab",
+        //             "ratio": 1
+        //         },
+        //         {
+        //             "unit": "mg",
+        //             "ratio": 5
+        //         },
+        //         {
+        //             "unit": "cc",
+        //             "ratio": 500
+        //         }
+        //     ],
+        //     "doseControl": true,
+        //     "adultDoseMax": 1.5,
+        //     "adultDailyDoseMax": 3,
+        //     "childDoseMax": 1,
+        //     "childDailyDoseMax": 2,
+        //     "wayLock": true,
+        //     "pregnancy": "C(D)",
+        //     "expireTime": "2020-08-03T08:51:49.422Z",
+        //     "timeStart": 1596444361915,
+        //     "checkResult": [],
+        //     "checkMedChange": true,
+        //     "checkHepatitis": true,
+        //     "checkDuplicate": true,
+        //     "checkAllopurinol": true,
+        //     "added": true,
+        //     "rowClass": [
+        //         "row-new",
+        //         "row-selected"
+        //     ],
+        //     "cellClass": {
+        //         "status": [
+        //             "dt-cell",
+        //             "dt-status"
+        //         ],
+        //         "medName": [
+        //             "dt-cell",
+        //             "dt-name"
+        //         ],
+        //         "dosageInUnit": [
+        //             "dt-cell",
+        //             "dt-dosage-in-unit"
+        //         ],
+        //         "way": [
+        //             "dt-cell",
+        //             "dt-way",
+        //             "cell-exec-not-allowed"
+        //         ],
+        //         "usage": [
+        //             "dt-cell",
+        //             "dt-usage",
+        //             "cell-exec-allowed"
+        //         ],
+        //         "isSelf": [
+        //             "dt-cell",
+        //             "dt-self"
+        //         ],
+        //         "isMill": [
+        //             "dt-cell",
+        //             "dt-mill",
+        //             "cell-exec-not-allowed"
+        //         ],
+        //         "advise": [
+        //             "dt-cell",
+        //             "dt-advise",
+        //             "cell-exec-allowed"
+        //         ],
+        //         "startTime": [
+        //             "dt-cell",
+        //             "dt-start-time"
+        //         ],
+        //         "endTime": [
+        //             "dt-cell",
+        //             "dt-end-time"
+        //         ],
+        //         "totalQty": [
+        //             "dt-cell",
+        //             "dt-total-qty"
+        //         ],
+        //         "totalUnit": [
+        //             "dt-cell",
+        //             "dt-total-unit"
+        //         ],
+        //         "medCode": [
+        //             "dt-cell",
+        //             "dt-med-code"
+        //         ],
+        //         "dosageQty": [
+        //             "dt-cell",
+        //             "dt-dosage-qty",
+        //             "cell-exec-allowed"
+        //         ],
+        //         "dosageUnit": [
+        //             "dt-cell",
+        //             "dt-dosage-unit",
+        //             "cell-exec-allowed"
+        //         ],
+        //         "usedDays": [
+        //             "dt-cell",
+        //             "dt-used-days",
+        //             "cell-exec-allowed"
+        //         ],
+        //         "firstQty": [
+        //             "dt-cell",
+        //             "dt-first-qty",
+        //             "cell-exec-not-allowed"
+        //         ]
+        //     },
+        //     "cellAlertMsg": {},
+        //     "editable": {
+        //         "status": true,
+        //         "dosageQty": true,
+        //         "dosageUnit": true,
+        //         "way": false,
+        //         "isSelf": true,
+        //         "isMill": false,
+        //         "usage": true,
+        //         "advise": true,
+        //         "usedDays": true,
+        //         "firstQty": false
+        //     },
+        //     "repetition": [],
+        //     "_selected": true,
+        //     "tipList": [],
+        //     "cellAlert": {}
+        // },
         {
-            "orderNo": 0,
-            "orderTimeStamp": "",
-            "orderSource": 0,
-            "groupNo": 0,
-            "seqNo": 0,
-            "visitNo": 136198811,
-            "medType": 1310100,
-            "invCode": 4005,
-            "medCode": "TIVABRA",
-            "antiType": "",
-            "medDesc": "",
-            "medName": "Ivabradine 5mg/Tab",
-            "dosageQty": 100,
-            "dosageUnit": "mg",
-            "unitList": [],
-            "ingredDosage": 0,
-            "capacityDosage": 0,
-            "volumeDosage": 0,
-            "capacityRatio": 1,
-            "volumeRatio": 5,
-            "usageNo": 1000,
-            "usage": "BID",
-            "usedTimeNo": 21,
-            "timePoint": "000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-            "usedTimeDesc": "",
-            "wayNo": 25,
-            "way": "PO",
-            "usedDays": 14,
-            "keepTime": 0,
-            "firstQty": 2,
-            "totalQty": 28,
-            "totalUnit": "Tab",
-            "ingredQty": 0,
-            "ingredRatio": 0,
-            "isSelf": false,
-            "isMill": false,
-            "isOnCost": false,
-            "canMill": false,
-            "canHalf": false,
-            "isMulti": false,
-            "advise": "",
-            "confirmUser": {
-                "userNo": 0,
-                "userCode": "",
-                "userName": ""
-            },
-            "confirmTime": "2020-08-03T08:50:49.400Z",
+            "medCode": "IDARBE21",
             "orderTime": "2020-08-03T08:57:17.828Z",
-            "startTime": "2020-08-03T08:57:17.828Z",
-            "startUser": {
-                "userNo": 30666,
-                "userCode": "A30666",
-                "userName": "楊名棟",
-                "empDiv": "120",
-                "saveChemo": false,
-                "controlledDrugLincense": false
-            },
-            "endTime": "2020-08-17T08:57:14.178Z",
-            "endUser": {
-                "userNo": 0,
-                "userCode": "",
-                "userName": ""
-            },
-            "preExecLoc": "B7  ",
-            "expandTime": "2020-08-03T08:50:49.400Z",
-            "tranTime": "2020-08-03T08:50:49.400Z",
-            "tranStatus": 0,
-            "statusName": "",
-            "stockNo": "",
-            "orderLoc": "",
-            "chargeType": "",
-            "isErAdd": false,
-            "isOpAdd": false,
-            "isChdAdd": false,
-            "registerNo": 0,
-            "linkNo": 0,
-            "masterNo": 0,
-            "detailNo": 0,
-            "controlDrug": 0,
-            "medStatus": 10,
-            "systemUserNo": 30666,
-            "systemTime": "2020-08-03T08:50:49.400Z",
-            "entityState": "added",
-            "dripRateInfo": [],
-            "nhiCode": "BC26097100  ",
-            "feeType": 0,
-            "dosageUnitNo": 10,
-            "chargeUnit": "Tab",
-            "dcRatio": 1,
-            "dosageForms": 1,
-            "highAlert": 0,
-            "isInterReview": false,
-            "isOpdOrder": false,
-            "isAdmOrder": true,
-            "isEmgOrder": false,
-            "isCtOrder": false,
-            "isPriorReview": false,
-            "priorReviewType": 0,
-            "isRelation": false,
-            "hints": [],
-            "atcCode": [
-                "C01EB17"
-            ],
-            "useFeatures": true,
-            "dosage": 1,
-            "chargeUnitNo": 10,
-            "fs6Phrcm": "O",
-            "unitConvertType": 1,
-            "displayDoseUnit": "mg",
-            "displayDoseRatio": 5,
-            "dosageUnitOptions": [
-                {
-                    "unit": "Tab",
-                    "ratio": 1
-                },
-                {
-                    "unit": "mg",
-                    "ratio": 5
-                },
-                {
-                    "unit": "cc",
-                    "ratio": 500
-                }
-            ],
-            "doseControl": true,
-            "adultDoseMax": 1.5,
-            "adultDailyDoseMax": 3,
-            "childDoseMax": 1,
-            "childDailyDoseMax": 2,
-            "wayLock": true,
-            "pregnancy": "C(D)",
-            "expireTime": "2020-08-03T08:51:49.422Z",
-            "timeStart": 1596444361915,
-            "checkResult": [],
-            "checkMedChange": true,
-            "checkHepatitis": true,
-            "checkDuplicate": true,
-            "checkAllopurinol": true,
-            "added": true,
-            "rowClass": [
-                "row-new",
-                "row-selected"
-            ],
-            "cellClass": {
-                "status": [
-                    "dt-cell",
-                    "dt-status"
-                ],
-                "medName": [
-                    "dt-cell",
-                    "dt-name"
-                ],
-                "dosageInUnit": [
-                    "dt-cell",
-                    "dt-dosage-in-unit"
-                ],
-                "way": [
-                    "dt-cell",
-                    "dt-way",
-                    "cell-exec-not-allowed"
-                ],
-                "usage": [
-                    "dt-cell",
-                    "dt-usage",
-                    "cell-exec-allowed"
-                ],
-                "isSelf": [
-                    "dt-cell",
-                    "dt-self"
-                ],
-                "isMill": [
-                    "dt-cell",
-                    "dt-mill",
-                    "cell-exec-not-allowed"
-                ],
-                "advise": [
-                    "dt-cell",
-                    "dt-advise",
-                    "cell-exec-allowed"
-                ],
-                "startTime": [
-                    "dt-cell",
-                    "dt-start-time"
-                ],
-                "endTime": [
-                    "dt-cell",
-                    "dt-end-time"
-                ],
-                "totalQty": [
-                    "dt-cell",
-                    "dt-total-qty"
-                ],
-                "totalUnit": [
-                    "dt-cell",
-                    "dt-total-unit"
-                ],
-                "medCode": [
-                    "dt-cell",
-                    "dt-med-code"
-                ],
-                "dosageQty": [
-                    "dt-cell",
-                    "dt-dosage-qty",
-                    "cell-exec-allowed"
-                ],
-                "dosageUnit": [
-                    "dt-cell",
-                    "dt-dosage-unit",
-                    "cell-exec-allowed"
-                ],
-                "usedDays": [
-                    "dt-cell",
-                    "dt-used-days",
-                    "cell-exec-allowed"
-                ],
-                "firstQty": [
-                    "dt-cell",
-                    "dt-first-qty",
-                    "cell-exec-not-allowed"
-                ]
-            },
-            "cellAlertMsg": {},
-            "editable": {
-                "status": true,
-                "dosageQty": true,
-                "dosageUnit": true,
-                "way": false,
-                "isSelf": true,
-                "isMill": false,
-                "usage": true,
-                "advise": true,
-                "usedDays": true,
-                "firstQty": false
-            },
-            "repetition": [],
-            "_selected": true,
-            "tipList": [],
-            "cellAlert": {}
-        },
-        { "medCode": "TIVABRA", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
-        { "medCode": "TIVABRA1", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
-        { "medCode": "TIVABRA2", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
-        { "medCode": "TIVABRA2", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" }
+            "medName": "Ivabradine 5mg/Tab",
+            "totalQty": 1,
+            "usedDays": 14,
+            "usage": "BID"
+        }
+        // { "medCode": "TIVABRA   ", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
+        // { "medCode": "TIVABRA1", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
+        // { "medCode": "TIVABRA2", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
+        // { "medCode": "TIVABRA2   ", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" }
     ],
+    "idNo": "B121259452",
     "visitNo": 136198811,
     "visitType": "A",
     "chartNo": "0032333947",

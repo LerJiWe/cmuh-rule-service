@@ -53,6 +53,16 @@ export class DrugFactService {
 
     }
 
+    public async getDailyQty(factVariable: CaseVariable, inputParams: Record<string, any>) {
+
+        const timePoint: string = inputParams["timePoint"];
+        let usedTimes = Array.from(timePoint).filter(x => x === '1').length;
+
+        let dosageQty = await this.getDosageQty(factVariable, inputParams);
+
+        return dosageQty * usedTimes;
+    }
+
     public async getUsedDays(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         const periodOrType: string = factVariable.params["for"];
@@ -68,47 +78,35 @@ export class DrugFactService {
             params['medCode'] = inputParams['medCode'];
             params['idNo'] = inputParams['idNo']
 
-            const periodNum = periodOrType.substring(0, (periodOrType.length - 1));
-            const periodUnit = periodOrType[periodOrType.length - 1];
+            let usedDate = await this.preparedUsedDate(periodOrType);
 
-            const dateOffset = (d: Date, offset: number) => d.setDate(d.getDate() - offset);
-            const monthOffset = (d: Date, offset: number) => d.setMonth(d.getMonth() - offset);
-            const yearOffset = (d: Date, offset: number) => d.setFullYear(d.getFullYear() - offset);
-            const fn = /D/i.test(periodUnit) ?
-                dateOffset :
-                /M/i.test(periodUnit) ?
-                    monthOffset : yearOffset;
+            params['startDate'] = usedDate.startDate;
+            params['endDate'] = usedDate.endDate;
+            params['isSelfList'] = [0, 1];
 
-            const startDate = new Date()
-            fn(startDate, Number(periodNum));
-            const endDate = new Date();
-
-            params['startDate'] = startDate;
-            params['endDate'] = endDate;
-
-            const result = await this.healthCare.executeQuery('getTotalQtyInPeriod', params)
-            let list = Array.isArray(result) ? result : [];
-
-            let admissionList: Set<string> = new Set();
-            let otherTime: number = 0;
-
-            list.forEach(l => {
-                if (l.visitType === 'A') {
-                    const time = new Date(l.execTime)
-                    admissionList.add(time.toDateString());
-                } else {
-                    const s = new Date(l.startDate);
-                    const e = new Date(l.endDate);
-                    otherTime += (e.getTime() - s.getTime()) / (24 * 60 * 60 * 1000) + 1;
-                }
-            });
-
+            const result = await this.healthCare.executeQuery('getDrugUsedQty', params)
+            // console.log('result', result);
+            // let list = Array.isArray(result) ? result : [];
+            let r = result.usedDays === undefined ? 0 : result.usedDays            
             let days = inputParams['usedDays'];
-            days += admissionList.size;
-            // console.log(admissionList);
-            days += otherTime;
 
-            return days;
+            // let admissionList: Set<string> = new Set();
+            // let otherTime: number = 0;
+            // list.forEach(l => {
+            //     if (l.visitType === 'A') {
+            //         const time = new Date(l.execTime)
+            //         admissionList.add(time.toDateString());
+            //     } else {
+            //         const s = new Date(l.startDate);
+            //         const e = new Date(l.endDate);
+            //         otherTime += (e.getTime() - s.getTime()) / (24 * 60 * 60 * 1000) + 1;
+            //     }
+            // });
+            // days += admissionList.size;
+            // console.log(admissionList);
+            // days += otherTime;
+
+            return days + r;
         }
         // TODO
         // switch (factVariable.params.for) {
@@ -125,16 +123,6 @@ export class DrugFactService {
         return inputParams['usedDays'];
     }
 
-    public async getDailyQty(factVariable: CaseVariable, inputParams: Record<string, any>) {
-
-        const timePoint: string = inputParams["timePoint"];
-        let usedTimes = Array.from(timePoint).filter(x => x === '1').length;
-
-        let dosageQty = await this.getDosageQty(factVariable, inputParams);
-
-        return dosageQty * usedTimes;
-    }
-
     public async getTotalQty(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         const periodOrType: string = factVariable.params["for"];
@@ -142,39 +130,55 @@ export class DrugFactService {
         if (periodOrType === 'N') { return inputParams['totalQty']; }
         else if (periodOrType === 'V') {
             console.log('TODO for this visit')
+            return inputParams['totalQty'];
         } else if (periodOrType === 'E') {
             console.log('TODO for Ever')
+            return inputParams['totalQty'];
         } else {
             let params: Record<string, any> = {}
             params['medCode'] = inputParams['medCode'];
+            // console.log('MedCode:', params['medCode']);
             params['idNo'] = inputParams['idNo']
+            // console.log('IdNo:', params['idNo']);
+            let usedDate = await this.preparedUsedDate(periodOrType);
 
-            const periodNum = periodOrType.substring(0, (periodOrType.length - 1));
-            const periodUnit = periodOrType[periodOrType.length - 1];
+            params['startDate'] = usedDate.startDate;
+            params['endDate'] = usedDate.endDate;
+            // console.log('startDate', startDate);
+            // console.log('endDate', endDate);
 
-            const dateOffset = (d: Date, offset: number) => d.setDate(d.getDate() - offset);
-            const monthOffset = (d: Date, offset: number) => d.setMonth(d.getMonth() - offset);
-            const yearOffset = (d: Date, offset: number) => d.setFullYear(d.getFullYear() - offset);
-            const fn = /D/i.test(periodUnit) ?
-                dateOffset :
-                /M/i.test(periodUnit) ?
-                    monthOffset : yearOffset;
+            // TODO 根據參數決定抓取 1.健保的量 2.自費的量 3.全都要
+            params['isSelfList'] = [0, 1];
 
-            const startDate = new Date()
-            fn(startDate, Number(periodNum));
-            const endDate = new Date();
-
-            params['startDate'] = startDate;
-            params['endDate'] = endDate;
-
-            const result = await this.healthCare.executeQuery('getTotalQtyInPeriod', params)
-            let list = Array.isArray(result) ? result : [];
-            // console.log(list);
+            const result = await this.healthCare.executeQuery('getDrugUsedQty', params)
+            // console.log(result);
+            // let list = Array.isArray(result) ? result : [];
+            let r = result.usedQty === undefined ? 0 : result.usedQty
             let qty = inputParams['totalQty'];
 
-            list.forEach(l => { qty += l.execQty });
-            return qty;
+            // list.forEach(l => { qty += l.usedQty });
+            return qty + r;
         }
+    }
+
+    private async preparedUsedDate(period: string) {
+
+        const periodNum = period.substring(0, (period.length - 1));
+        const periodUnit = period[period.length - 1];
+
+        const dateOffset = (d: Date, offset: number) => d.setDate(d.getDate() - offset);
+        const monthOffset = (d: Date, offset: number) => d.setMonth(d.getMonth() - offset);
+        const yearOffset = (d: Date, offset: number) => d.setFullYear(d.getFullYear() - offset);
+        const fn = /D/i.test(periodUnit) ?
+            dateOffset :
+            /M/i.test(periodUnit) ?
+                monthOffset : yearOffset;
+
+        const startDate = new Date()
+        fn(startDate, Number(periodNum));
+        const endDate = new Date();
+
+        return { startDate, endDate };
     }
 
     // public async getTotalQtyInPeriod(factVariable: CaseVariable, inputParams: Record<string, any>) {
@@ -304,10 +308,10 @@ export class DrugFactService {
 
         let medCodeList: string[] = [];
 
-        let filterArray = medOrderList.filter(x => { return x.medCode !== medCode });
+        let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim() });
 
         filterArray.forEach(x => {
-            medCodeList.push(x.medCode);
+            medCodeList.push(x.medCode.trim());
         });
 
         return medCodeList;
@@ -320,7 +324,7 @@ export class DrugFactService {
     public getFreq(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         let usage: string = inputParams["usage"];
-        return usage;
+        return usage.trim();
     }
 
     /**
@@ -332,14 +336,20 @@ export class DrugFactService {
     public async getAtcCodes(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         let params: { medCodeList: Array<string> } = { "medCodeList": [] }
-
-        let medOrderList: any[] = inputParams["medOrderList"];
-
         let result: string[] = []
 
-        medOrderList.forEach(x => {
-            params.medCodeList.push(x.medCode);
+        let medOrderList: any[] = inputParams["medOrderList"];
+        let medCode: string = inputParams["medCode"];
+
+        // TODO 跟藥師確認, atc code是否有要加入自己的
+        let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim() });
+
+        filterArray.forEach(x => {
+            params.medCodeList.push(x.medCode.trim());
         });
+        // medOrderList.forEach(x => {
+        //     params.medCodeList.push(x.medCode);
+        // });
 
         const spResult: Array<{ medCode: string, seqNo: number, atcCode: string }> =
             await this.healthCare.executeQuery('getAtcCodes', params);

@@ -7,9 +7,10 @@ export declare class DrugFactService {
     constructor(config: ApiConfig<Config>);
     getIsNhi(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<string>;
     getDosageQty(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
-    getUsedDays(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
     getDailyQty(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<number>;
+    getUsedDays(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
     getTotalQty(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
+    private preparedUsedDate;
     getTotalQtyInMonth(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
     getDrugs(factVariable: CaseVariable, inputParams: Record<string, any>): string[];
     getOrders(factVariable: CaseVariable, inputParams: Record<string, any>): void;

@@ -57,6 +57,14 @@ class DrugFactService {
             }
         });
     }
+    getDailyQty(factVariable, inputParams) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const timePoint = inputParams["timePoint"];
+            let usedTimes = Array.from(timePoint).filter(x => x === '1').length;
+            let dosageQty = yield this.getDosageQty(factVariable, inputParams);
+            return dosageQty * usedTimes;
+        });
+    }
     getUsedDays(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
             const periodOrType = factVariable.params["for"];
@@ -73,40 +81,31 @@ class DrugFactService {
                 let params = {};
                 params['medCode'] = inputParams['medCode'];
                 params['idNo'] = inputParams['idNo'];
-                const periodNum = periodOrType.substring(0, (periodOrType.length - 1));
-                const periodUnit = periodOrType[periodOrType.length - 1];
-                const dateOffset = (d, offset) => d.setDate(d.getDate() - offset);
-                const monthOffset = (d, offset) => d.setMonth(d.getMonth() - offset);
-                const yearOffset = (d, offset) => d.setFullYear(d.getFullYear() - offset);
-                const fn = /D/i.test(periodUnit) ?
-                    dateOffset :
-                    /M/i.test(periodUnit) ?
-                        monthOffset : yearOffset;
-                const startDate = new Date();
-                fn(startDate, Number(periodNum));
-                const endDate = new Date();
-                params['startDate'] = startDate;
-                params['endDate'] = endDate;
-                const result = yield this.healthCare.executeQuery('getTotalQtyInPeriod', params);
-                let list = Array.isArray(result) ? result : [];
-                let admissionList = new Set();
-                let otherTime = 0;
-                list.forEach(l => {
-                    if (l.visitType === 'A') {
-                        const time = new Date(l.execTime);
-                        admissionList.add(time.toDateString());
-                    }
-                    else {
-                        const s = new Date(l.startDate);
-                        const e = new Date(l.endDate);
-                        otherTime += (e.getTime() - s.getTime()) / (24 * 60 * 60 * 1000) + 1;
-                    }
-                });
+                let usedDate = yield this.preparedUsedDate(periodOrType);
+                params['startDate'] = usedDate.startDate;
+                params['endDate'] = usedDate.endDate;
+                params['isSelfList'] = [0, 1];
+                const result = yield this.healthCare.executeQuery('getDrugUsedQty', params);
+                // console.log('result', result);
+                // let list = Array.isArray(result) ? result : [];
+                let r = result.usedDays === undefined ? 0 : result.usedDays;
                 let days = inputParams['usedDays'];
-                days += admissionList.size;
+                // let admissionList: Set<string> = new Set();
+                // let otherTime: number = 0;
+                // list.forEach(l => {
+                //     if (l.visitType === 'A') {
+                //         const time = new Date(l.execTime)
+                //         admissionList.add(time.toDateString());
+                //     } else {
+                //         const s = new Date(l.startDate);
+                //         const e = new Date(l.endDate);
+                //         otherTime += (e.getTime() - s.getTime()) / (24 * 60 * 60 * 1000) + 1;
+                //     }
+                // });
+                // days += admissionList.size;
                 // console.log(admissionList);
-                days += otherTime;
-                return days;
+                // days += otherTime;
+                return days + r;
             }
             // TODO
             // switch (factVariable.params.for) {
@@ -122,14 +121,6 @@ class DrugFactService {
             return inputParams['usedDays'];
         });
     }
-    getDailyQty(factVariable, inputParams) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const timePoint = inputParams["timePoint"];
-            let usedTimes = Array.from(timePoint).filter(x => x === '1').length;
-            let dosageQty = yield this.getDosageQty(factVariable, inputParams);
-            return dosageQty * usedTimes;
-        });
-    }
     getTotalQty(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
             const periodOrType = factVariable.params["for"];
@@ -138,35 +129,50 @@ class DrugFactService {
             }
             else if (periodOrType === 'V') {
                 console.log('TODO for this visit');
+                return inputParams['totalQty'];
             }
             else if (periodOrType === 'E') {
                 console.log('TODO for Ever');
+                return inputParams['totalQty'];
             }
             else {
                 let params = {};
                 params['medCode'] = inputParams['medCode'];
+                // console.log('MedCode:', params['medCode']);
                 params['idNo'] = inputParams['idNo'];
-                const periodNum = periodOrType.substring(0, (periodOrType.length - 1));
-                const periodUnit = periodOrType[periodOrType.length - 1];
-                const dateOffset = (d, offset) => d.setDate(d.getDate() - offset);
-                const monthOffset = (d, offset) => d.setMonth(d.getMonth() - offset);
-                const yearOffset = (d, offset) => d.setFullYear(d.getFullYear() - offset);
-                const fn = /D/i.test(periodUnit) ?
-                    dateOffset :
-                    /M/i.test(periodUnit) ?
-                        monthOffset : yearOffset;
-                const startDate = new Date();
-                fn(startDate, Number(periodNum));
-                const endDate = new Date();
-                params['startDate'] = startDate;
-                params['endDate'] = endDate;
-                const result = yield this.healthCare.executeQuery('getTotalQtyInPeriod', params);
-                let list = Array.isArray(result) ? result : [];
-                // console.log(list);
+                // console.log('IdNo:', params['idNo']);
+                let usedDate = yield this.preparedUsedDate(periodOrType);
+                params['startDate'] = usedDate.startDate;
+                params['endDate'] = usedDate.endDate;
+                // console.log('startDate', startDate);
+                // console.log('endDate', endDate);
+                // TODO 根據參數決定抓取 1.健保的量 2.自費的量 3.全都要
+                params['isSelfList'] = [0, 1];
+                const result = yield this.healthCare.executeQuery('getDrugUsedQty', params);
+                // console.log(result);
+                // let list = Array.isArray(result) ? result : [];
+                let r = result.usedQty === undefined ? 0 : result.usedQty;
                 let qty = inputParams['totalQty'];
-                list.forEach(l => { qty += l.execQty; });
-                return qty;
+                // list.forEach(l => { qty += l.usedQty });
+                return qty + r;
             }
+        });
+    }
+    preparedUsedDate(period) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const periodNum = period.substring(0, (period.length - 1));
+            const periodUnit = period[period.length - 1];
+            const dateOffset = (d, offset) => d.setDate(d.getDate() - offset);
+            const monthOffset = (d, offset) => d.setMonth(d.getMonth() - offset);
+            const yearOffset = (d, offset) => d.setFullYear(d.getFullYear() - offset);
+            const fn = /D/i.test(periodUnit) ?
+                dateOffset :
+                /M/i.test(periodUnit) ?
+                    monthOffset : yearOffset;
+            const startDate = new Date();
+            fn(startDate, Number(periodNum));
+            const endDate = new Date();
+            return { startDate, endDate };
         });
     }
     // public async getTotalQtyInPeriod(factVariable: CaseVariable, inputParams: Record<string, any>) {
@@ -266,9 +272,9 @@ class DrugFactService {
         let medOrderList = inputParams["medOrderList"];
         let medCode = inputParams["medCode"];
         let medCodeList = [];
-        let filterArray = medOrderList.filter(x => { return x.medCode !== medCode; });
+        let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim(); });
         filterArray.forEach(x => {
-            medCodeList.push(x.medCode);
+            medCodeList.push(x.medCode.trim());
         });
         return medCodeList;
     }
@@ -277,7 +283,7 @@ class DrugFactService {
     }
     getFreq(factVariable, inputParams) {
         let usage = inputParams["usage"];
-        return usage;
+        return usage.trim();
     }
     /**
      * getAtcCodes
@@ -288,11 +294,17 @@ class DrugFactService {
     getAtcCodes(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
             let params = { "medCodeList": [] };
-            let medOrderList = inputParams["medOrderList"];
             let result = [];
-            medOrderList.forEach(x => {
-                params.medCodeList.push(x.medCode);
+            let medOrderList = inputParams["medOrderList"];
+            let medCode = inputParams["medCode"];
+            // TODO 跟藥師確認, atc code是否有要加入自己的
+            let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim(); });
+            filterArray.forEach(x => {
+                params.medCodeList.push(x.medCode.trim());
             });
+            // medOrderList.forEach(x => {
+            //     params.medCodeList.push(x.medCode);
+            // });
             const spResult = yield this.healthCare.executeQuery('getAtcCodes', params);
             spResult.forEach(x => {
                 result.push(x.atcCode.trim());

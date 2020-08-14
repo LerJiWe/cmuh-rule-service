@@ -3,6 +3,7 @@ export interface VisitFact {
     branchNo?: number;
     visitType?: string;
 
+    idNo? : string;
     visitNo: number;
     chartNo: number | string,
     birthday?: Date | string | undefined;
