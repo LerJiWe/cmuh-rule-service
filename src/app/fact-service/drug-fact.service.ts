@@ -39,21 +39,17 @@ export class DrugFactService {
         let targetUnit: string = factVariable.params['unit'];
         if (targetUnit === undefined || targetUnit.length === 0) {
             targetUnit = displayDoseUnit || dosageUnit;
-        }
-        // if (targetUnit === undefined) {  
-        //     targetUnit = ;
-        // }
+        }    
 
         let orderToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === dosageUnit.toLowerCase());
         let nhiToRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === targetUnit.toLowerCase());
         if (orderToNhiRatio === undefined) {
             console.log('orderToNhiRatio is undefined')
-            return dosageQty;
+            let err: { type: string, txt: string } = { type: 'error', txt: '單位轉換有問題' };
+            throw err;
         } else if (nhiToRatio === undefined) {
             console.log('nhiToRatio is undefined');
-            let err: { type: string, txt: string }
-            err.type = 'error';
-            err.txt = '單位轉換有問題';
+            let err: { type: string, txt: string } = { type: 'error', txt: '單位轉換有問題' };
             throw err;
         } else {
             let tempDosageQty = dosageQty / Number(orderToNhiRatio.ratio); // 換成計價單位

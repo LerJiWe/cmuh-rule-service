@@ -44,20 +44,16 @@ class DrugFactService {
             if (targetUnit === undefined || targetUnit.length === 0) {
                 targetUnit = displayDoseUnit || dosageUnit;
             }
-            // if (targetUnit === undefined) {  
-            //     targetUnit = ;
-            // }
             let orderToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === dosageUnit.toLowerCase());
             let nhiToRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === targetUnit.toLowerCase());
             if (orderToNhiRatio === undefined) {
                 console.log('orderToNhiRatio is undefined');
-                return dosageQty;
+                let err = { type: 'error', txt: '單位轉換有問題' };
+                throw err;
             }
             else if (nhiToRatio === undefined) {
                 console.log('nhiToRatio is undefined');
-                let err;
-                err.type = 'error';
-                err.txt = '單位轉換有問題';
+                let err = { type: 'error', txt: '單位轉換有問題' };
                 throw err;
             }
             else {
