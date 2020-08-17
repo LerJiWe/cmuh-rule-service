@@ -29,23 +29,32 @@ export class DrugFactService {
         // displayDoseRatio 服用單位劑量: 計價單位劑量 的比值
         // dosageUnitOptions 是藥品的單位選項 {unit: 單位,ratio: 比值}
 
-        const dosage = inputParams['dosage'];
+        // const dosage = inputParams['dosage'];
 
         const dosageQty = inputParams['dosageQty'];
         const dosageUnit: string = inputParams['dosageUnit'];
         const dosageUnitOptions: { unit: string, ratio: number | string }[] = inputParams['dosageUnitOptions'];
         const displayDoseUnit: string = inputParams["displayDoseUnit"];
 
-        const targetUnit: string = factVariable.params['unit'] === undefined ? displayDoseUnit : factVariable.params['unit'];
+        let targetUnit: string = factVariable.params['unit'];
+        if (targetUnit === undefined || targetUnit.length === 0) {
+            targetUnit = displayDoseUnit || dosageUnit;
+        }
+        // if (targetUnit === undefined) {  
+        //     targetUnit = ;
+        // }
 
         let orderToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === dosageUnit.toLowerCase());
         let nhiToRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === targetUnit.toLowerCase());
         if (orderToNhiRatio === undefined) {
             console.log('orderToNhiRatio is undefined')
-            return dosage
+            return dosageQty;
         } else if (nhiToRatio === undefined) {
-            console.log('nhiToRatio is undefined')
-            return dosage
+            console.log('nhiToRatio is undefined');
+            let err: { type: string, txt: string }
+            err.type = 'error';
+            err.txt = '單位轉換有問題';
+            throw err;
         } else {
             let tempDosageQty = dosageQty / Number(orderToNhiRatio.ratio); // 換成計價單位
             return tempDosageQty * Number(nhiToRatio.ratio);
@@ -56,7 +65,7 @@ export class DrugFactService {
     public async getDailyQty(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         const timePoint: string = inputParams["timePoint"];
-        let usedTimes = Array.from(timePoint).filter(x => x === '1').length;
+        let usedTimes = Array.from(timePoint).filter(x => { return x === '1' }).length;
 
         let dosageQty = await this.getDosageQty(factVariable, inputParams);
 
