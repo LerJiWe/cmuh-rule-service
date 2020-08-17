@@ -297,14 +297,14 @@ class DrugFactService {
      */
     getAtcCodes(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
-            let params = { "medCodeList": [] };
+            let params = [];
             let result = [];
             let medOrderList = inputParams["medOrderList"];
             let medCode = inputParams["medCode"];
             // TODO 跟藥師確認, atc code是否有要加入自己的
             let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim(); });
             filterArray.forEach(x => {
-                params.medCodeList.push(x.medCode.trim());
+                params.push(x.medCode.trim());
             });
             // medOrderList.forEach(x => {
             //     params.medCodeList.push(x.medCode);

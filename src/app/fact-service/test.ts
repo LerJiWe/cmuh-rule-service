@@ -24,11 +24,11 @@ class Test {
 
                 // let r = await this.drugSvc.getTotalQtyInPeriod(f, inputParams);
                 // let r = await this.drugSvc.getTotalQty(f, inputParams);
-                let r = await this.drugSvc.getUsedDays(f, inputParams);
+                // let r = await this.drugSvc.getUsedDays(f, inputParams);
                 // let r = await this.drugSvc.getFreq(f, inputParams);                
                 // let r = await this.drugSvc.getDrugs(f, inputParams);
                 // let r = await this.drugSvc.getDosageQty(f, inputParams);
-                // let r = await this.drugSvc.getAtcCodes(f, inputParams);
+                let r = await this.drugSvc.getAtcCodes(f, inputParams);
                 // let r = await this.drugSvc.getDrugs(f, inputParams);
 
                 // let r = await this.patientSvc.getAge(f, inputParams);
@@ -382,7 +382,15 @@ const visitFact = {
         //     "cellAlert": {}
         // },
         {
-            "medCode": "IDARBE21",
+            "medCode": "ODICLO4",
+            "orderTime": "2020-08-03T08:57:17.828Z",
+            "medName": "Ivabradine 5mg/Tab",
+            "totalQty": 1,
+            "usedDays": 14,
+            "usage": "BID"
+        },
+        {
+            "medCode": "TACEMET1",
             "orderTime": "2020-08-03T08:57:17.828Z",
             "medName": "Ivabradine 5mg/Tab",
             "totalQty": 1,
@@ -394,6 +402,7 @@ const visitFact = {
         // { "medCode": "TIVABRA2", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" },
         // { "medCode": "TIVABRA2   ", "orderTime": "2020-08-03T08:57:17.828Z", "medName": "Ivabradine 5mg/Tab" }
     ],
+    "medCode": "TACEMET1",
     "idNo": "B121259452",
     "visitNo": 136198811,
     "visitType": "A",

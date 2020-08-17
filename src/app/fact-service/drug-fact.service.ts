@@ -340,8 +340,8 @@ export class DrugFactService {
      */
     public async getAtcCodes(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
-        let params: { medCodeList: Array<string> } = { "medCodeList": [] }
-        let result: string[] = []
+        let params: Array<string> = [];
+        let result: string[] = [];
 
         let medOrderList: any[] = inputParams["medOrderList"];
         let medCode: string = inputParams["medCode"];
@@ -350,7 +350,7 @@ export class DrugFactService {
         let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim() });
 
         filterArray.forEach(x => {
-            params.medCodeList.push(x.medCode.trim());
+            params.push(x.medCode.trim());
         });
         // medOrderList.forEach(x => {
         //     params.medCodeList.push(x.medCode);
