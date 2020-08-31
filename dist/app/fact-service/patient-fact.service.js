@@ -25,6 +25,7 @@ class PatientFactService {
     getAge(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
             let birthdayString = yield this.getBirthday(factVariable, inputParams);
+            // console.log('生日', birthdayString);
             const birthday = new Date(birthdayString);
             // const now = inputParams['orderTime'] === undefined ? new Date() : new Date(inputParams['orderTime'])
             const now = new Date();
@@ -34,28 +35,34 @@ class PatientFactService {
             const birthdayM = birthday.getMonth();
             const nowD = now.getDate();
             const birthdayD = birthday.getDate();
+            let result;
             switch (factVariable.params['in']) {
                 case 'Y':
-                    return nowY - birthdayY;
+                    result = nowY - birthdayY;
+                    break;
                 case 'M':
-                    return nowM - birthdayM >= 0 ? nowY - birthdayY : nowY - birthdayY - 1;
+                    result = nowM - birthdayM >= 0 ? nowY - birthdayY : nowY - birthdayY - 1;
+                    break;
                 case 'D':
-                    return nowM - birthdayM > 0 ?
+                    result = nowM - birthdayM > 0 ?
                         nowY - birthdayY :
                         nowM - birthdayM < 0 ?
                             nowY - birthdayY - 1 :
                             nowD - birthdayD >= 0 ?
                                 nowY - birthdayY :
                                 nowY - birthdayY - 1;
+                    break;
                 default:
-                    return nowM - birthdayM > 0 ?
+                    result = nowM - birthdayM > 0 ?
                         nowY - birthdayY :
                         nowM - birthdayM < 0 ?
                             nowY - birthdayY - 1 :
                             nowD - birthdayD >= 0 ?
                                 nowY - birthdayY :
                                 nowY - birthdayY - 1;
+                    break;
             }
+            return result;
         });
     }
     getMonths(factVariable, inputParams) {
@@ -115,7 +122,6 @@ class PatientFactService {
                 yield this.healthCare.executeQuery('getPatientsByChartNo', params)
                 : inputParams['sex'];
             const sex = result[0].sex === undefined ? result : result[0].sex;
-            return sex;
             switch (sex) {
                 case '男':
                     return "1";
