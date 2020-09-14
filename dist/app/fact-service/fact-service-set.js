@@ -31,7 +31,6 @@ class FactServiceSet {
         if (FactServiceSet.servicePool.has(serviceName)) {
             return FactServiceSet.servicePool.get(serviceName);
         }
-        // const serviceClass = new FactService.serviceSet[serviceName](this.config)
         const serviceClass = new this.serviceSet[serviceName](this.config);
         FactServiceSet.servicePool.set(serviceName, serviceClass);
         return serviceClass;

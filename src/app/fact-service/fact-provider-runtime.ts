@@ -22,6 +22,10 @@ export class FactProviderRuntime implements FactProvider<Promise<Record<string, 
         for (let factVariable of caseVariables) {
 
             let factPath = FactProviderRuntime.factPathMap[factVariable.variable];
+            if (factPath === undefined) {
+                let err: { type: string, level: number, txt: string } = { type: 'error', level: 63, txt: '不正確的fact名稱' };
+                throw err;
+            }
 
             // 如果沒有 cacheFact, 則需要抓值並且放入 factValurGroup之中
             if (cacheFacts[!(factVariable.fullName) ? factVariable.variable : factVariable.fullName] === undefined ||
@@ -134,7 +138,7 @@ export class FactProviderRuntime implements FactProvider<Promise<Record<string, 
             functionName: 'getDays',
             isCache: true
         },
-        'birthdate': {
+        'birthday': {
             serviceName: 'PatientFactService',
             functionName: 'getBirthday',
             isCache: true

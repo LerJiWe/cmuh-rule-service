@@ -39,21 +39,21 @@ export class DrugFactService {
         let targetUnit: string = factVariable.params['unit'];
         if (targetUnit === undefined || targetUnit.length === 0) {
             targetUnit = displayDoseUnit || dosageUnit;
-        }    
+        }
 
         let orderToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === dosageUnit.toLowerCase());
-        let nhiToRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === targetUnit.toLowerCase());
+        let targetToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === targetUnit.toLowerCase());
         if (orderToNhiRatio === undefined) {
             console.log('orderToNhiRatio is undefined')
-            let err: { type: string, txt: string } = { type: 'error', txt: '單位轉換有問題' };
+            let err: { type: string, level: number, txt: string } = { type: 'error', level: 63, txt: '單位轉換有問題' };
             throw err;
-        } else if (nhiToRatio === undefined) {
+        } else if (targetToNhiRatio === undefined) {
             console.log('nhiToRatio is undefined');
-            let err: { type: string, txt: string } = { type: 'error', txt: '單位轉換有問題' };
+            let err: { type: string, level: number, txt: string } = { type: 'error', level: 63, txt: '單位轉換有問題' };
             throw err;
         } else {
             let tempDosageQty = dosageQty / Number(orderToNhiRatio.ratio); // 換成計價單位
-            return tempDosageQty * Number(nhiToRatio.ratio);
+            return tempDosageQty * Number(targetToNhiRatio.ratio);
         }
 
     }

@@ -28,9 +28,8 @@ export class FactServiceSet {
 
         serviceName = this.serviceNames.includes(serviceName) ? serviceName : 'Undefined';
         if (FactServiceSet.servicePool.has(serviceName)) { return FactServiceSet.servicePool.get(serviceName) }
-
-        // const serviceClass = new FactService.serviceSet[serviceName](this.config)
-        const serviceClass = new this.serviceSet[serviceName](this.config)
+        
+        const serviceClass = new this.serviceSet[serviceName](this.config);
 
         FactServiceSet.servicePool.set(serviceName, serviceClass);
         return serviceClass;
@@ -47,6 +46,7 @@ export class FactServiceSet {
         // const fact = FactService.factPool.get(factName);
 
         const tempClass = this.getServiceClass(factPath.serviceName);
+
         return await tempClass[factPath.functionName](factVariable, inputParams);
     }
 

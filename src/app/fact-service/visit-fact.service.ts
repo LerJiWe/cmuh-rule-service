@@ -179,7 +179,14 @@ export class VisitFactService {
 
         const result = await this.healthCare.executeQuery('getLastLabValue', params);
 
-        return result === undefined ? factVariable.params["invalidValue"] : result.examValue
+        if (result.examValue === undefined) {
+            let err = { type: 'error', level: 63, txt: '檢驗值不存在' };
+            throw err;
+        } else {
+            return result.examValue;
+        }
+
+        // return result === undefined ? factVariable.params["invalidValue"] : result.examValue
 
         // let list = Array.isArray(result) ? result : [];
         // list.forEach(x => x.examTime = new Date(x.examTime));

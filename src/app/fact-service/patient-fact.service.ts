@@ -131,15 +131,7 @@ export class PatientFactService {
             : inputParams['sex'];
 
         const sex = result[0].sex === undefined ? result : result[0].sex;
-
-        switch (sex) {
-            case '男':
-                return "1";
-            case '女':
-                return "2";
-            default:
-                return "0";
-        }
+        return sex;
     }
 
     public async getChartNo(factVariable: CaseVariable, inputParams: Record<string, any>) {

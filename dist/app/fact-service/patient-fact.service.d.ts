@@ -9,7 +9,7 @@ export declare class PatientFactService {
     getMonths(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<number>;
     getDays(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<number>;
     getBirthday(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<string>;
-    getGender(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<"1" | "2" | "0">;
+    getGender(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
     getChartNo(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
     getPatientInfo(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<Record<string, any>>;
     private calAge;
