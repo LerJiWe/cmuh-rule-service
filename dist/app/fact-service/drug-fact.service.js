@@ -48,12 +48,12 @@ class DrugFactService {
             let targetToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === targetUnit.toLowerCase());
             if (orderToNhiRatio === undefined) {
                 console.log('orderToNhiRatio is undefined');
-                let err = { type: 'error', level: 63, txt: '單位轉換有問題' };
+                let err = '單位轉換有問題';
                 throw err;
             }
             else if (targetToNhiRatio === undefined) {
                 console.log('nhiToRatio is undefined');
-                let err = { type: 'error', level: 63, txt: '單位轉換有問題' };
+                let err = '單位轉換有問題';
                 throw err;
             }
             else {

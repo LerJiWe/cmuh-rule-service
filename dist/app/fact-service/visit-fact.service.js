@@ -167,7 +167,7 @@ class VisitFactService {
             params['endDate'] = endDate;
             const result = yield this.healthCare.executeQuery('getLastLabValue', params);
             if (result.examValue === undefined) {
-                let err = { type: 'error', level: 63, txt: '檢驗值不存在' };
+                let err = '檢驗值不存在';
                 throw err;
             }
             else {

@@ -44,12 +44,12 @@ export class DrugFactService {
         let orderToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === dosageUnit.toLowerCase());
         let targetToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === targetUnit.toLowerCase());
         if (orderToNhiRatio === undefined) {
-            console.log('orderToNhiRatio is undefined')
-            let err: { type: string, level: number, txt: string } = { type: 'error', level: 63, txt: '單位轉換有問題' };
+            console.log('orderToNhiRatio is undefined')            
+            let err: string = '單位轉換有問題';
             throw err;
         } else if (targetToNhiRatio === undefined) {
-            console.log('nhiToRatio is undefined');
-            let err: { type: string, level: number, txt: string } = { type: 'error', level: 63, txt: '單位轉換有問題' };
+            console.log('nhiToRatio is undefined');            
+            let err: string = '單位轉換有問題';
             throw err;
         } else {
             let tempDosageQty = dosageQty / Number(orderToNhiRatio.ratio); // 換成計價單位

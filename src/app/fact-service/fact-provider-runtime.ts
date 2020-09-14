@@ -22,8 +22,8 @@ export class FactProviderRuntime implements FactProvider<Promise<Record<string, 
         for (let factVariable of caseVariables) {
 
             let factPath = FactProviderRuntime.factPathMap[factVariable.variable];
-            if (factPath === undefined) {
-                let err: { type: string, level: number, txt: string } = { type: 'error', level: 63, txt: '不正確的fact名稱' };
+            if (factPath === undefined) {                
+                let err: string = '不正確的fact名稱';
                 throw err;
             }
 
