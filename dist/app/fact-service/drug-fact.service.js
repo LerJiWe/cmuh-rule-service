@@ -171,13 +171,32 @@ class DrugFactService {
             // const periodUnit = period[period.length - 1];
             const periodNum = period.quantity;
             const periodUnit = period.unit;
+            let fn;
             const dateOffset = (d, offset) => d.setDate(d.getDate() - offset);
             const monthOffset = (d, offset) => d.setMonth(d.getMonth() - offset);
             const yearOffset = (d, offset) => d.setFullYear(d.getFullYear() - offset);
-            const fn = /D/i.test(periodUnit) ?
-                dateOffset :
-                /M/i.test(periodUnit) ?
-                    monthOffset : yearOffset;
+            const sYearOffset = (d, offset) => {
+                d.setFullYear(d.getFullYear() - offset);
+                d.setMonth(0);
+                d.setDate(1);
+            };
+            switch (periodUnit) {
+                case 'D':
+                    fn = dateOffset;
+                    break;
+                case 'M':
+                    fn = monthOffset;
+                    break;
+                case 'Y':
+                    fn = yearOffset;
+                    break;
+                case 'S':
+                    fn = sYearOffset;
+                    break;
+                default:
+                    throw 'fact的時間單位設定錯誤';
+                    break;
+            }
             const startDate = new Date();
             fn(startDate, Number(periodNum));
             const endDate = new Date();
@@ -324,6 +343,44 @@ class DrugFactService {
     getWay(factVariable, inputParams) {
         let way = inputParams["way"];
         return way;
+    }
+    // 檢驗檢查新增的 Fact需求
+    getOtherOrder(factVariable, inputParams) {
+        let medOrderList = inputParams["medOrderList"];
+        let medCode = inputParams["medCode"];
+        let medCodeList = [];
+        let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim(); });
+        filterArray.forEach(x => {
+            medCodeList.push(x.medCode.trim());
+        });
+        return medCodeList;
+    }
+    getOrderTimes(factVariable, inputParams) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let result = 0;
+            const periodOrType = factVariable.params["for"];
+            let medCodes = factVariable.params['medCodes'] || [];
+            medCodes.push(inputParams['medCode']);
+            let params = {};
+            params['medCodes'] = medCodes;
+            params['idNo'] = inputParams['idNo'];
+            if (periodOrType === 'N') {
+                return 1;
+            }
+            else {
+                let period = typeof (periodOrType) === 'string' ? undefined : periodOrType;
+                let usedDate = yield this.preparedUsedDate(period);
+                params['startDate'] = usedDate.startDate;
+                params['endDate'] = usedDate.endDate;
+                let r = yield this.healthCare.executeQuery('getExamTimes', params);
+                console.log('r', r);
+                r.forEach(x => {
+                    result += Number(x.usedTimes);
+                    console.log(Number(x.usedTimes));
+                });
+                return result;
+            }
+        });
     }
 }
 exports.DrugFactService = DrugFactService;

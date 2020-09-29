@@ -44,11 +44,11 @@ export class DrugFactService {
         let orderToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === dosageUnit.toLowerCase());
         let targetToNhiRatio = dosageUnitOptions.find(dop => dop.unit.toLowerCase() === targetUnit.toLowerCase());
         if (orderToNhiRatio === undefined) {
-            console.log('orderToNhiRatio is undefined')            
+            console.log('orderToNhiRatio is undefined')
             let err: string = '單位轉換有問題';
             throw err;
         } else if (targetToNhiRatio === undefined) {
-            console.log('nhiToRatio is undefined');            
+            console.log('nhiToRatio is undefined');
             let err: string = '單位轉換有問題';
             throw err;
         } else {
@@ -176,13 +176,35 @@ export class DrugFactService {
         const periodNum = period.quantity;
         const periodUnit = period.unit;
 
+        let fn: (d: Date, offset: number) => void;
+
         const dateOffset = (d: Date, offset: number) => d.setDate(d.getDate() - offset);
         const monthOffset = (d: Date, offset: number) => d.setMonth(d.getMonth() - offset);
         const yearOffset = (d: Date, offset: number) => d.setFullYear(d.getFullYear() - offset);
-        const fn = /D/i.test(periodUnit) ?
-            dateOffset :
-            /M/i.test(periodUnit) ?
-                monthOffset : yearOffset;
+        const sYearOffset = (d: Date, offset: number) => {
+            d.setFullYear(d.getFullYear() - offset);
+            d.setMonth(0);
+            d.setDate(1);
+        };
+
+        switch (periodUnit) {
+            case 'D':
+                fn = dateOffset;
+                break;
+            case 'M':
+                fn = monthOffset;
+                break;
+            case 'Y':
+                fn = yearOffset;
+                break;
+            case 'S':
+                fn = sYearOffset
+                break;
+            default:
+                throw 'fact的時間單位設定錯誤';
+                break;
+        }
+
 
         const startDate = new Date()
         fn(startDate, Number(periodNum));
@@ -375,6 +397,53 @@ export class DrugFactService {
         return way;
     }
 
+    // 檢驗檢查新增的 Fact需求
+
+    public getOtherOrder(factVariable: CaseVariable, inputParams: Record<string, any>) {
+
+        let medOrderList: any[] = inputParams["medOrderList"];
+        let medCode: string = inputParams["medCode"];
+
+        let medCodeList: string[] = [];
+
+        let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim() });
+
+        filterArray.forEach(x => {
+            medCodeList.push(x.medCode.trim());
+        });
+
+        return medCodeList;
+    }
+
+    public async getOrderTimes(factVariable: CaseVariable, inputParams: Record<string, any>) {
+
+        let result: number = 0;
+        const periodOrType: string | { quantity: number, unit: string } = factVariable.params["for"];
+        let medCodes = factVariable.params['medCodes'] || [];
+        medCodes.push(inputParams['medCode']);
+
+        let params: Record<string, any> = {};
+        params['medCodes'] = medCodes;
+        params['idNo'] = inputParams['idNo'];
+
+
+        if (periodOrType === 'N') { return 1 }
+        else {
+            let period: { quantity: number, unit: string } = typeof (periodOrType) === 'string' ? undefined : periodOrType;
+            let usedDate = await this.preparedUsedDate(period);
+
+            params['startDate'] = usedDate.startDate;
+            params['endDate'] = usedDate.endDate;
+            let r = await this.healthCare.executeQuery('getExamTimes', params);
+            console.log('r', r);
+            r.forEach(x => {
+                result += Number(x.usedTimes);
+                console.log(Number(x.usedTimes));
+            });
+
+            return result;
+        }
+    }
 
 
 

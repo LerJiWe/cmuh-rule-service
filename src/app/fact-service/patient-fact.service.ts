@@ -185,4 +185,25 @@ export class PatientFactService {
         }
     }
 
+    // 檢驗檢查新增的 Fact需求
+    public async getBloodTypeExist(factVariable: CaseVariable, inputParams: Record<string, any>) {
+
+        let params: Record<string, any> = {}
+
+        let idNo = inputParams['idNo'];
+        params['idNo'] = idNo;
+
+        let r = await this.healthCare.executeQuery('getBloodType', params);
+        console.log('rrrr', r);
+        if (r.bloodType === undefined) {
+            return 'FALSE';
+        } else {
+            let result: string = r.bloodType.trim() == '' ? 'FALSE' : 'TRUE';
+            return result;
+        }
+
+
+    }
+
+
 }

@@ -22,7 +22,7 @@ export class FactProviderRuntime implements FactProvider<Promise<Record<string, 
         for (let factVariable of caseVariables) {
 
             let factPath = FactProviderRuntime.factPathMap[factVariable.variable];
-            if (factPath === undefined) {                
+            if (factPath === undefined) {
                 let err: string = '不正確的fact名稱';
                 throw err;
             }
@@ -195,20 +195,41 @@ export class FactProviderRuntime implements FactProvider<Promise<Record<string, 
             functionName: 'getOrders',
             isCache: true
         },
-        'drugs': { // TODO
+        'drugs': {
             serviceName: 'DrugFactService',
-            functionName: 'getDrugs',
+            functionName: 'getOtherOrder',
             isCache: true
         },
         'atc': { // TODO
             serviceName: 'DrugFactService',
             functionName: 'getAtcCodes',
-            isCache: true
+            isCache: false
         },
         'way': { // TODO
             serviceName: 'DrugFactService',
             functionName: 'getWay',
+            isCache: false
+        },
+        // 檢驗檢查
+        'license': {
+            serviceName: 'VisitFactService',
+            functionName: 'getLicense',
             isCache: true
+        },
+        'otherOrder': {
+            serviceName: 'DrugFactService',
+            functionName: 'getOtherOrder',
+            isCache: false
+        },
+        'bloodTypeExist': {
+            serviceName: 'PatientFactService',
+            functionName: 'getBloodTypeExist',
+            isCache: true
+        },
+        'orderTimes': {
+            serviceName: 'DrugFactService',
+            functionName: 'getOrderTimes',
+            isCache: false
         }
     }
 }

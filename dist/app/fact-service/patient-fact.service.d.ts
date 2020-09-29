@@ -14,4 +14,5 @@ export declare class PatientFactService {
     getPatientInfo(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<Record<string, any>>;
     private calAge;
     private gender;
+    getBloodTypeExist(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<string>;
 }

@@ -170,6 +170,23 @@ class PatientFactService {
                 return "0";
         }
     }
+    // 檢驗檢查新增的 Fact需求
+    getBloodTypeExist(factVariable, inputParams) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let params = {};
+            let idNo = inputParams['idNo'];
+            params['idNo'] = idNo;
+            let r = yield this.healthCare.executeQuery('getBloodType', params);
+            console.log('rrrr', r);
+            if (r.bloodType === undefined) {
+                return 'FALSE';
+            }
+            else {
+                let result = r.bloodType.trim() == '' ? 'FALSE' : 'TRUE';
+                return result;
+            }
+        });
+    }
 }
 exports.PatientFactService = PatientFactService;
 //# sourceMappingURL=patient-fact.service.js.map

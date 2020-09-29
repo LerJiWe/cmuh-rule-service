@@ -20,4 +20,5 @@ export declare class VisitFactService {
      */
     getD(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<void>;
     getGroupMedCode(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any[]>;
+    getLicense(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any[]>;
 }

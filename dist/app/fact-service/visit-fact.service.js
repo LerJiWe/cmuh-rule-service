@@ -211,6 +211,33 @@ class VisitFactService {
             // TODO
         });
     }
+    // 檢驗檢查新增的 Fact需求
+    getLicense(factVariable, inputParams) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let result = [];
+            // const orDr: string = inputParams['userCode'];
+            const orDr = inputParams['userNo'];
+            let params = {};
+            params['empNo'] = orDr.substring(1);
+            let r = yield this.healthCare.executeQuery('getLicense', params);
+            console.log(params);
+            if (r.length === 0) {
+                return result;
+            }
+            else {
+                r.forEach(x => {
+                    result.push(x.licenseType);
+                });
+                result.push();
+                return result;
+            }
+            // let r1 = r.length === 0 ? { "licenseaaaaaaa": "0" } : r;
+            // console.log(params);
+            // console.log('r', r);
+            // console.log('r1', r1);
+            // r.forEacn(x => { console.log(x); });        
+        });
+    }
 }
 exports.VisitFactService = VisitFactService;
 //# sourceMappingURL=visit-fact.service.js.map

@@ -20,8 +20,9 @@ class Test {
       for (let f of factVariables) {
         console.log(f.params)
         try {
-          let r = await this.visitSvc.getExamValue(f, inputParams);
+          // let r = await this.visitSvc.getExamValue(f, inputParams);
           // let r = await this.visitSvc.getDivNo(f, inputParams);
+          // let r = await this.visitSvc.getLicense(f, inputParams);
 
           // let r = await this.drugSvc.getTotalQtyInPeriod(f, inputParams);
           // let r = await this.drugSvc.getTotalQty(f, inputParams);
@@ -31,9 +32,12 @@ class Test {
           // let r = await this.drugSvc.getDosageQty(f, inputParams);
           // let r = await this.drugSvc.getAtcCodes(f, inputParams);
           // let r = await this.drugSvc.getDrugs(f, inputParams);
+          let r = await this.drugSvc.getOrderTimes(f, inputParams);
 
           // let r = await this.patientSvc.getAge(f, inputParams);
           // let r = await this.patientSvc.getGender(f, inputParams);
+          // let r = await this.patientSvc.getBloodTypeExist(f, inputParams);
+
           console.log(r);
         } catch (error) {
           console.log(error);
@@ -91,18 +95,23 @@ let patientSvc = new PatientFactService(config);
 
 
 const facts: CaseVariable[] = [
-  {
-    variable: "examValue",
-    params: {
-      "examItemNos": [
-        2047,
-        2152,
-        2153
-      ],
-      "for": "10Y"
-    },
-    fullName: "examValue_for_13D"
-  },
+  // {
+  //   variable: "examValue",
+  //   params: {
+  //     "examItemNos": [
+  //       2047,
+  //       2152,
+  //       2153
+  //     ],
+  //     "for": "10Y"
+  //   },
+  //   fullName: "examValue_for_13D"
+  // },
+  // {
+  //   variable: "license",
+  //   params: { },
+  //   fullName: "license"
+  // },
   // {
   //   variable: "dosage",
   //   params: {
@@ -118,12 +127,26 @@ const facts: CaseVariable[] = [
   //     fullName: ""
   // },
   // {
-  //     variable: "totalQty",
-  //     params: {
-  //         "for": "100D"
-  //     },
-  //     fullName: "totalQty_for_100D"
+  //   variable: "totalQty",
+  //   params: {
+  //     "for": {
+  //       "quantity": 2,
+  //       "unit": "SS"
+  //     }
+  //   },
+  //   fullName: "totalQty_for_100D"
   // },
+  {
+    variable: "orderTimes",
+    params: {
+      "for": {
+        "quantity": 2,
+        "unit": "S"
+      },
+      "medCodes": ["W0000142", "W0000071", "W0000072"]
+    },
+    fullName: "totalQty_for_100D"
+  }
   // {
   //     variable: "freq",
   //     params: {},
@@ -416,6 +439,8 @@ const visitFact = {
   "visitNo": 163033672,
   "visitType": "A",
   "chartNo": "0036084891",
+  "idNo": "A100513352",
+  // "idNo": "L100474153",
   "ptName": "陳正源",
   "birthday": "1968-02-05T16:00:00.000Z",
   "admissionTime": "2020-08-04T10:28:00.000Z",
@@ -498,7 +523,7 @@ const visitFact = {
   "teamCare": "",
   "isChild": false,
   "userNo": 30666,
-  "userCode": "A30666",
+  "userCode": "D0025",
   "userName": "楊名棟",
   "empDiv": "120",
   "saveChemo": false,

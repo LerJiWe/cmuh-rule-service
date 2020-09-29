@@ -191,18 +191,39 @@ FactProviderRuntime.factPathMap = {
     },
     'drugs': {
         serviceName: 'DrugFactService',
-        functionName: 'getDrugs',
+        functionName: 'getOtherOrder',
         isCache: true
     },
     'atc': {
         serviceName: 'DrugFactService',
         functionName: 'getAtcCodes',
-        isCache: true
+        isCache: false
     },
     'way': {
         serviceName: 'DrugFactService',
         functionName: 'getWay',
+        isCache: false
+    },
+    // 檢驗檢查
+    'license': {
+        serviceName: 'VisitFactService',
+        functionName: 'getLicense',
         isCache: true
+    },
+    'otherOrder': {
+        serviceName: 'DrugFactService',
+        functionName: 'getOtherOrder',
+        isCache: false
+    },
+    'bloodTypeExist': {
+        serviceName: 'PatientFactService',
+        functionName: 'getBloodTypeExist',
+        isCache: true
+    },
+    'orderTimes': {
+        serviceName: 'DrugFactService',
+        functionName: 'getOrderTimes',
+        isCache: false
     }
 };
 // TEST

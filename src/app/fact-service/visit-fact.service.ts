@@ -179,7 +179,7 @@ export class VisitFactService {
 
         const result = await this.healthCare.executeQuery('getLastLabValue', params);
 
-        if (result.examValue === undefined) {            
+        if (result.examValue === undefined) {
             let err: string = '檢驗值不存在';
             throw err;
         } else {
@@ -228,6 +228,36 @@ export class VisitFactService {
         console.log(result);
         return groupNo === 0 ? [] : result;
         // TODO
+    }
+
+    // 檢驗檢查新增的 Fact需求
+    
+    public async getLicense(factVariable: CaseVariable, inputParams: Record<string, any>) {
+
+        let result = [];
+
+        // const orDr: string = inputParams['userCode'];
+        const orDr: string = inputParams['userNo'];
+
+        let params: Record<string, any> = {}
+        params['empNo'] = orDr.substring(1);
+        let r = await this.healthCare.executeQuery('getLicense', params);
+        console.log(params);
+
+        if (r.length === 0) {
+            return result;
+        } else {
+            r.forEach(x => {
+                result.push(x.licenseType)
+            });
+            result.push()
+            return result;
+        }
+        // let r1 = r.length === 0 ? { "licenseaaaaaaa": "0" } : r;
+        // console.log(params);
+        // console.log('r', r);
+        // console.log('r1', r1);
+        // r.forEacn(x => { console.log(x); });        
     }
 
 }
