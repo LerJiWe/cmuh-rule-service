@@ -215,10 +215,9 @@ class VisitFactService {
     getLicense(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
             let result = [];
-            // const orDr: string = inputParams['userCode'];
             const orDr = inputParams['userNo'];
             let params = {};
-            params['empNo'] = orDr.substring(1);
+            params['empNo'] = orDr;
             let r = yield this.healthCare.executeQuery('getLicense', params);
             console.log(params);
             if (r.length === 0) {
@@ -231,11 +230,6 @@ class VisitFactService {
                 result.push();
                 return result;
             }
-            // let r1 = r.length === 0 ? { "licenseaaaaaaa": "0" } : r;
-            // console.log(params);
-            // console.log('r', r);
-            // console.log('r1', r1);
-            // r.forEacn(x => { console.log(x); });        
         });
     }
 }

@@ -235,12 +235,11 @@ export class VisitFactService {
     public async getLicense(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         let result = [];
-
-        // const orDr: string = inputParams['userCode'];
+        
         const orDr: string = inputParams['userNo'];
 
         let params: Record<string, any> = {}
-        params['empNo'] = orDr.substring(1);
+        params['empNo'] = orDr;
         let r = await this.healthCare.executeQuery('getLicense', params);
         console.log(params);
 
@@ -252,12 +251,7 @@ export class VisitFactService {
             });
             result.push()
             return result;
-        }
-        // let r1 = r.length === 0 ? { "licenseaaaaaaa": "0" } : r;
-        // console.log(params);
-        // console.log('r', r);
-        // console.log('r1', r1);
-        // r.forEacn(x => { console.log(x); });        
+        }        
     }
 
 }
