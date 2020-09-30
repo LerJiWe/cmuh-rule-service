@@ -195,13 +195,20 @@ export class PatientFactService {
 
         let r = await this.healthCare.executeQuery('getBloodType', params);
         console.log('rrrr', r);
-        if (r.bloodType === undefined) {
+        if (r.length === 0) {
             return 'FALSE';
         } else {
-            let result: string = r.bloodType.trim() == '' ? 'FALSE' : 'TRUE';
+            let rFilter = r.filter(x => x.bloodType.trim() !== '');
+            let result = rFilter.length === 0 ? 'FALSE' : 'TRUE';
             return result;
         }
 
+        // if (r.bloodType === undefined) {
+        //     return 'FALSE';
+        // } else {
+        //     let result: string = r.bloodType.trim() == '' ? 'FALSE' : 'TRUE';
+        //     return result;
+        // }
 
     }
 

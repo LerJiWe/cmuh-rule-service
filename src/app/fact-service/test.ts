@@ -143,7 +143,8 @@ const facts: CaseVariable[] = [
         "quantity": 2,
         "unit": "S"
       },
-      "medCodes": ["W0000142", "W0000071", "W0000072"]
+      // "medCodes": ["W0000142", "W0000071", "W0000072"]
+      "medCodes": []
     },
     fullName: "totalQty_for_100D"
   }
@@ -179,7 +180,10 @@ const visitFact = {
       "visitNo": 163033672,
       "medType": 1310100,
       "invCode": 241,
-      "medCode": "IDEGAR8",
+      // "medCode": "IDEGAR8",
+      // "medCode": "W0000142",
+      // "medCode": "W0000071",
+      "medCode": "W0000072",
       "antiType": "",
       "medDesc": "",
       "medName": "Degarelix 80mg/pre-filled Syringe",
@@ -439,8 +443,8 @@ const visitFact = {
   "visitNo": 163033672,
   "visitType": "A",
   "chartNo": "0036084891",
-  "idNo": "A100513352",
-  // "idNo": "L100474153",
+  // "idNo": "A100513352",
+  "idNo": "L100474153",
   "ptName": "陳正源",
   "birthday": "1968-02-05T16:00:00.000Z",
   "admissionTime": "2020-08-04T10:28:00.000Z",
