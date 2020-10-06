@@ -364,8 +364,9 @@ class DrugFactService {
             let params = {};
             params['medCodes'] = medCodes;
             params['idNo'] = inputParams['idNo'];
+            let dosage = inputParams['dosage'] || 1;
             if (periodOrType === 'N') {
-                return 1;
+                return dosage;
             }
             else {
                 let period = typeof (periodOrType) === 'string' ? undefined : periodOrType;
@@ -373,12 +374,11 @@ class DrugFactService {
                 params['startDate'] = usedDate.startDate;
                 params['endDate'] = usedDate.endDate;
                 let r = yield this.healthCare.executeQuery('getExamTimes', params);
-                console.log('r', r);
                 r.forEach(x => {
                     result += Number(x.usedTimes);
                     console.log(Number(x.usedTimes));
                 });
-                return result;
+                return result + Number(dosage);
             }
         });
     }

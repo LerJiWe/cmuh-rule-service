@@ -24,5 +24,5 @@ export declare class DrugFactService {
     getAtcCodes(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<string[]>;
     getWay(factVariable: CaseVariable, inputParams: Record<string, any>): string;
     getOtherOrder(factVariable: CaseVariable, inputParams: Record<string, any>): string[];
-    getOrderTimes(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<number>;
+    getOrderTimes(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
 }

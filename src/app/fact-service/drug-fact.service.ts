@@ -426,22 +426,22 @@ export class DrugFactService {
         params['medCodes'] = medCodes;
         params['idNo'] = inputParams['idNo'];
 
+        let dosage = inputParams['dosage'] || 1;
 
-        if (periodOrType === 'N') { return 1 }
+        if (periodOrType === 'N') { return dosage; }
         else {
             let period: { quantity: number, unit: string } = typeof (periodOrType) === 'string' ? undefined : periodOrType;
             let usedDate = await this.preparedUsedDate(period);
 
             params['startDate'] = usedDate.startDate;
             params['endDate'] = usedDate.endDate;
-            let r = await this.healthCare.executeQuery('getExamTimes', params);
-            console.log('r', r);
+            let r = await this.healthCare.executeQuery('getExamTimes', params);            
             r.forEach(x => {
                 result += Number(x.usedTimes);
                 console.log(Number(x.usedTimes));
             });
 
-            return result;
+            return result + Number(dosage);
         }
     }
 
