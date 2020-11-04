@@ -110,7 +110,7 @@ export class VisitFactService {
 
         params['empNo'] = orDr.substring(1);
 
-        const result = await this.healthCare.executeQuery('getEmpDivision', params);
+        const result = await this.healthCare.executeQuery('getEmpDivisionInfo', params);
 
         let tmpArray: Array<{ empNo: number, divNo: string }> = result === undefined ? [] : result;
         let divNos = tmpArray.map(x => {

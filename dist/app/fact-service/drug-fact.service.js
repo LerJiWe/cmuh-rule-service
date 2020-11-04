@@ -368,6 +368,20 @@ class DrugFactService {
             if (periodOrType === 'N') {
                 return dosage;
             }
+            else if (periodOrType === 'E') {
+                // console.log('for=E');
+                params['startDate'] = new Date('1911/01/01');
+                params['endDate'] = new Date();
+                // console.time('getExamTimes');
+                let r = yield this.healthCare.executeQuery('getExamTimes', params);
+                // console.timeEnd('getExamTimes');
+                r.forEach(x => {
+                    result += Number(x.usedTimes);
+                    // console.log(Number(x.usedTimes));
+                });
+                // console.log('r', r);
+                return result + Number(dosage);
+            }
             else {
                 let period = typeof (periodOrType) === 'string' ? undefined : periodOrType;
                 let usedDate = yield this.preparedUsedDate(period);
@@ -376,7 +390,7 @@ class DrugFactService {
                 let r = yield this.healthCare.executeQuery('getExamTimes', params);
                 r.forEach(x => {
                     result += Number(x.usedTimes);
-                    console.log(Number(x.usedTimes));
+                    // console.log(Number(x.usedTimes));
                 });
                 return result + Number(dosage);
             }

@@ -429,16 +429,31 @@ export class DrugFactService {
         let dosage = inputParams['dosage'] || 1;
 
         if (periodOrType === 'N') { return dosage; }
+        else if (periodOrType === 'E') {
+
+            // console.log('for=E');
+            params['startDate'] = new Date('1911/01/01');
+            params['endDate'] = new Date();
+            // console.time('getExamTimes');
+            let r = await this.healthCare.executeQuery('getExamTimes', params);
+            // console.timeEnd('getExamTimes');
+            r.forEach(x => {
+                result += Number(x.usedTimes);
+                // console.log(Number(x.usedTimes));
+            });
+            // console.log('r', r);
+            return result + Number(dosage);
+        }
         else {
             let period: { quantity: number, unit: string } = typeof (periodOrType) === 'string' ? undefined : periodOrType;
             let usedDate = await this.preparedUsedDate(period);
 
             params['startDate'] = usedDate.startDate;
             params['endDate'] = usedDate.endDate;
-            let r = await this.healthCare.executeQuery('getExamTimes', params);            
+            let r = await this.healthCare.executeQuery('getExamTimes', params);
             r.forEach(x => {
                 result += Number(x.usedTimes);
-                console.log(Number(x.usedTimes));
+                // console.log(Number(x.usedTimes));
             });
 
             return result + Number(dosage);

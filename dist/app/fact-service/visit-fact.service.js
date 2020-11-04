@@ -108,7 +108,7 @@ class VisitFactService {
             //         break;
             // }
             params['empNo'] = orDr.substring(1);
-            const result = yield this.healthCare.executeQuery('getEmpDivision', params);
+            const result = yield this.healthCare.executeQuery('getEmpDivisionInfo', params);
             let tmpArray = result === undefined ? [] : result;
             let divNos = tmpArray.map(x => {
                 return x.divNo.trim();
