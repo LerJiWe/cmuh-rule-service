@@ -23,7 +23,7 @@ class DrugFactService {
     }
     get healthRecord() {
         if (!this._healthRecord) {
-            this._healthRecord = new mssql_1.SqlExecute(this.config.getDbConfig('healthRecords'));
+            this._healthRecord = new mssql_1.SqlExecute(this.config.getDbConfig('healthRecord'));
         }
         return this._healthRecord;
     }

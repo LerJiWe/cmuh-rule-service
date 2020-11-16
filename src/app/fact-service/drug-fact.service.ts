@@ -17,7 +17,7 @@ export class DrugFactService {
     private get healthRecord(): SqlExecute {
 
         if(!this._healthRecord) {
-            this._healthRecord = new SqlExecute(this.config.getDbConfig('healthRecords'));
+            this._healthRecord = new SqlExecute(this.config.getDbConfig('healthRecord'));
         }
         return this._healthRecord;
     }

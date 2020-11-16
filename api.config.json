@@ -23,7 +23,7 @@
                 "idleTimeoutMillis": 3000
             }
         },
-        "healthRecords": {
+        "healthRecord": {
             "user": "ap10",
             "password": "1qaz@WSX",
             "domain": "ADCMUH",
