@@ -231,11 +231,11 @@ export class VisitFactService {
     }
 
     // 檢驗檢查新增的 Fact需求
-    
+
     public async getLicense(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         let result = [];
-        
+
         const orDr: string = inputParams['userNo'];
 
         let params: Record<string, any> = {}
@@ -251,7 +251,8 @@ export class VisitFactService {
             });
             result.push()
             return result;
-        }        
+        }
     }
+
 
 }

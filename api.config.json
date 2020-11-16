@@ -23,6 +23,25 @@
                 "idleTimeoutMillis": 3000
             }
         },
+        "healthRecords": {
+            "user": "ap10",
+            "password": "1qaz@WSX",
+            "domain": "ADCMUH",
+            "server": "10.20.3.43",
+            "database": "HealthRecord",
+            "port": 61899,
+            "connectionTimeout": 15000,
+            "requestTimeout": 15000,
+            "stream": false,
+            "options": {
+                "encrypt": false
+            },
+            "pool": {
+                "max": 10,
+                "min": 0,
+                "idleTimeoutMillis": 3000
+            }
+        },
         "healthResource": {
             "user": "ap10",
             "password": "1qaz@WSX",

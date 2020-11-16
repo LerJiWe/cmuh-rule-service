@@ -21,6 +21,12 @@ class DrugFactService {
         }
         return this._healthCare;
     }
+    get healthRecord() {
+        if (!this._healthRecord) {
+            this._healthRecord = new mssql_1.SqlExecute(this.config.getDbConfig('healthRecords'));
+        }
+        return this._healthRecord;
+    }
     getIsNhi(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
             let r = inputParams['isSelf'] ? "FALSE" : "TRUE";
@@ -393,6 +399,41 @@ class DrugFactService {
                     // console.log(Number(x.usedTimes));
                 });
                 return result + Number(dosage);
+            }
+        });
+    }
+    getReportExist(factVariable, inputParams) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const periodOrType = factVariable.params["for"];
+            let examTypes = factVariable.params['examTypes'] || [];
+            let params = {};
+            params['idNo'] = inputParams['idNo'];
+            params['examTypes'] = examTypes;
+            if (periodOrType === 'E') {
+                params['startDate'] = new Date('1911/01/01');
+                params['endDate'] = new Date();
+                let r = yield this.healthRecord.executeQuery('getExistExamReport', params);
+                // console.log('result', r);            
+                if (r.length > 0) {
+                    return 'TRUE';
+                }
+                else {
+                    return 'FALSE';
+                }
+            }
+            else {
+                let period = typeof (periodOrType) === 'string' ? undefined : periodOrType;
+                let usedDate = yield this.preparedUsedDate(period);
+                params['startDate'] = usedDate.startDate;
+                params['endDate'] = usedDate.endDate;
+                let r = yield this.healthRecord.executeQuery('getExistExamReport', params);
+                // console.log('result', r);
+                if (r.length > 0) {
+                    return 'TRUE';
+                }
+                else {
+                    return 'FALSE';
+                }
             }
         });
     }

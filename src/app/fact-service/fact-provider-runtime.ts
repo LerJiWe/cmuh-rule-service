@@ -230,6 +230,11 @@ export class FactProviderRuntime implements FactProvider<Promise<Record<string, 
             serviceName: 'DrugFactService',
             functionName: 'getOrderTimes',
             isCache: false
+        },
+        'reportExist': {
+            serviceName: 'DrugFactService',
+            functionName: 'getReportExist',
+            isCache: true
         }
     }
 }

@@ -4,6 +4,8 @@ export declare class DrugFactService {
     private config;
     private _healthCare;
     private get healthCare();
+    private _healthRecord;
+    private get healthRecord();
     constructor(config: ApiConfig<Config>);
     getIsNhi(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<string>;
     getDosageQty(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<number>;
@@ -25,4 +27,5 @@ export declare class DrugFactService {
     getWay(factVariable: CaseVariable, inputParams: Record<string, any>): string;
     getOtherOrder(factVariable: CaseVariable, inputParams: Record<string, any>): string[];
     getOrderTimes(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
+    getReportExist(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<"FALSE" | "TRUE">;
 }

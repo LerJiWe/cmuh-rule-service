@@ -32,7 +32,8 @@ class Test {
           // let r = await this.drugSvc.getDosageQty(f, inputParams);
           // let r = await this.drugSvc.getAtcCodes(f, inputParams);
           // let r = await this.drugSvc.getDrugs(f, inputParams);
-          let r = await this.drugSvc.getOrderTimes(f, inputParams);
+          // let r = await this.drugSvc.getOrderTimes(f, inputParams);
+          let r = await this.drugSvc.getReportExist(f, inputParams);
 
           // let r = await this.patientSvc.getAge(f, inputParams);
           // let r = await this.patientSvc.getGender(f, inputParams);
@@ -149,11 +150,14 @@ const facts: CaseVariable[] = [
   //   fullName: "totalQty_for_100D"
   // },
   {
-    variable: "orderTimes",
+    variable: "reportExist",
     params: {
-      "for": "E",
+      "for": {
+        "quantity": 3,
+        "unit": "M"
+      },
       // "medCodes": ["W0000142", "W0000071", "W0000072"]
-      "medCodes": []
+      "examTypes": ["5250501"]
     },
     fullName: "orderTimes_for_E_medCodes_"
   }
@@ -452,8 +456,9 @@ const visitFact = {
   "visitNo": 163033672,
   "visitType": "A",
   "chartNo": "0036084891",
-  // "idNo": "A100513352",
-  "idNo": "Q220842653",
+  //  "idNo": "L124065781",
+  //"idNo": "Q220842653",
+  "idNo": "H225702863",
   "ptName": "陳正源",
   "birthday": "1968-02-05T16:00:00.000Z",
   "admissionTime": "2020-08-04T10:28:00.000Z",

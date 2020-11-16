@@ -13,6 +13,15 @@ export class DrugFactService {
         return this._healthCare;
     }
 
+    private _healthRecord!: SqlExecute;
+    private get healthRecord(): SqlExecute {
+
+        if(!this._healthRecord) {
+            this._healthRecord = new SqlExecute(this.config.getDbConfig('healthRecords'));
+        }
+        return this._healthRecord;
+    }
+
     constructor(private config: ApiConfig<Config>) { }
 
     public async getIsNhi(factVariable: CaseVariable, inputParams: Record<string, any>) {
@@ -457,6 +466,42 @@ export class DrugFactService {
             });
 
             return result + Number(dosage);
+        }
+    }
+
+
+    public async getReportExist(factVariable: CaseVariable, inputParams: Record<string, any>) {
+        
+        const periodOrType: string | { quantity: number, unit: string } = factVariable.params["for"];
+        let examTypes = factVariable.params['examTypes'] || [];
+
+        let params: Record<string, any> = {};
+        params['idNo'] = inputParams['idNo'];
+        params['examTypes'] = examTypes;
+
+        if (periodOrType === 'E') {
+            params['startDate'] = new Date('1911/01/01');
+            params['endDate'] = new Date();            
+            let r = await this.healthRecord.executeQuery('getExistExamReport', params);
+            // console.log('result', r);            
+            if (r.length > 0) {
+                return 'TRUE';
+            } else {
+                return 'FALSE';
+            }
+        } else {
+            let period: { quantity: number, unit: string } = typeof (periodOrType) === 'string' ? undefined : periodOrType;
+            let usedDate = await this.preparedUsedDate(period);
+
+            params['startDate'] = usedDate.startDate;
+            params['endDate'] = usedDate.endDate;
+            let r = await this.healthRecord.executeQuery('getExistExamReport', params);
+            // console.log('result', r);
+            if (r.length > 0) {
+                return 'TRUE';
+            } else {
+                return 'FALSE';
+            }
         }
     }
 

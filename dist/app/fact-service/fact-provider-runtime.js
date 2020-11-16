@@ -224,6 +224,11 @@ FactProviderRuntime.factPathMap = {
         serviceName: 'DrugFactService',
         functionName: 'getOrderTimes',
         isCache: false
+    },
+    'reportExist': {
+        serviceName: 'DrugFactService',
+        functionName: 'getReportExist',
+        isCache: true
     }
 };
 // TEST
