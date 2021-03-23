@@ -16,7 +16,7 @@ export class DrugFactService {
     private _healthRecord!: SqlExecute;
     private get healthRecord(): SqlExecute {
 
-        if(!this._healthRecord) {
+        if (!this._healthRecord) {
             this._healthRecord = new SqlExecute(this.config.getDbConfig('healthRecord'));
         }
         return this._healthRecord;
@@ -342,22 +342,6 @@ export class DrugFactService {
     //     // TODO
     // }
 
-    public getDrugs(factVariable: CaseVariable, inputParams: Record<string, any>) {
-
-        let medOrderList: any[] = inputParams["medOrderList"];
-        let medCode: string = inputParams["medCode"];
-
-        let medCodeList: string[] = [];
-
-        let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim() });
-
-        filterArray.forEach(x => {
-            medCodeList.push(x.medCode.trim());
-        });
-
-        return medCodeList;
-    }
-
     public getOrders(factVariable: CaseVariable, inputParams: Record<string, any>) {
         // TODO
     }
@@ -471,7 +455,7 @@ export class DrugFactService {
 
 
     public async getReportExist(factVariable: CaseVariable, inputParams: Record<string, any>) {
-        
+
         const periodOrType: string | { quantity: number, unit: string } = factVariable.params["for"];
         let examTypes = factVariable.params['examTypes'] || [];
 
@@ -481,7 +465,7 @@ export class DrugFactService {
 
         if (periodOrType === 'E') {
             params['startDate'] = new Date('1911/01/01');
-            params['endDate'] = new Date();            
+            params['endDate'] = new Date();
             let r = await this.healthRecord.executeQuery('getExistExamReport', params);
             // console.log('result', r);            
             if (r.length > 0) {

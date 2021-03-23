@@ -302,16 +302,6 @@ class DrugFactService {
     //     return days;
     //     // TODO
     // }
-    getDrugs(factVariable, inputParams) {
-        let medOrderList = inputParams["medOrderList"];
-        let medCode = inputParams["medCode"];
-        let medCodeList = [];
-        let filterArray = medOrderList.filter(x => { return x.medCode.trim() !== medCode.trim(); });
-        filterArray.forEach(x => {
-            medCodeList.push(x.medCode.trim());
-        });
-        return medCodeList;
-    }
     getOrders(factVariable, inputParams) {
         // TODO
     }

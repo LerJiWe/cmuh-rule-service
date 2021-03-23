@@ -14,7 +14,6 @@ export declare class DrugFactService {
     getTotalQty(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
     private preparedUsedDate;
     getTotalQtyInMonth(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
-    getDrugs(factVariable: CaseVariable, inputParams: Record<string, any>): string[];
     getOrders(factVariable: CaseVariable, inputParams: Record<string, any>): void;
     getFreq(factVariable: CaseVariable, inputParams: Record<string, any>): string;
     /**
