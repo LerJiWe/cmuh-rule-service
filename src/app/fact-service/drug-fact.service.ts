@@ -67,11 +67,14 @@ export class DrugFactService {
 
     }
 
+    /**
+     * 
+     */
     public async getDailyQty(factVariable: CaseVariable, inputParams: Record<string, any>) {
 
         const timePoint: string = inputParams["timePoint"];
         let usedTimes = Array.from(timePoint).filter(x => { return x === '1' }).length;
-
+        usedTimes = usedTimes == 0 ? 1 : usedTimes; // 避免 STAT 或是其他 timePoin 算出來會是 0的
         let dosageQty = await this.getDosageQty(factVariable, inputParams);
 
         return dosageQty * usedTimes;

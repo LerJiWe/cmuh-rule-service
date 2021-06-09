@@ -9,6 +9,9 @@ export declare class DrugFactService {
     constructor(config: ApiConfig<Config>);
     getIsNhi(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<string>;
     getDosageQty(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<number>;
+    /**
+     *
+     */
     getDailyQty(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<number>;
     getUsedDays(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;
     getTotalQty(factVariable: CaseVariable, inputParams: Record<string, any>): Promise<any>;

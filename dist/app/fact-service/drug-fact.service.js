@@ -68,10 +68,14 @@ class DrugFactService {
             }
         });
     }
+    /**
+     *
+     */
     getDailyQty(factVariable, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
             const timePoint = inputParams["timePoint"];
             let usedTimes = Array.from(timePoint).filter(x => { return x === '1'; }).length;
+            usedTimes = usedTimes == 0 ? 1 : usedTimes; // 避免 STAT 或是其他 timePoin 算出來會是 0的
             let dosageQty = yield this.getDosageQty(factVariable, inputParams);
             return dosageQty * usedTimes;
         });
